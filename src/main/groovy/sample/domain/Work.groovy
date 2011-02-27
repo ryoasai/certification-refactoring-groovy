@@ -43,29 +43,27 @@ class Work extends EntityBase<WorkKey> {
 	@Override
 	String[] toArray() {
 			
-		List<String> dataList = 
-			new ArrayList<String>(
-					Arrays.asList(
-							String.valueOf(getHrId()),
-							String.valueOf(getWorkStatusNo()),
-							String.valueOf(getPartnerId()),
-							getStartDate(),
-							getEndDate(),
-							getContractSalary()))
+		def dataList = [
+			hrId,
+			workStatusNo,
+			partnerId,
+			startDate,
+			endDate,
+			contractSalary]
 		
 		dataList.addAll(createDateColumns())
-		return dataList.toArray(new String[dataList.size()])
+		dataList.toArray()
 	}
 
 	@Override
 	void fromArray(String[] data) {
 		int i = 0
-		setHrId(Long.valueOf(data[i++]))
-		setWorkStatusNo(Long.valueOf(data[i++]))
-		setPartnerId(Long.valueOf(data[i++]))
-		setStartDate(data[i++])
-		setEndDate(data[i++])
-		setContractSalary(data[i++])
+		hrId = data[i++].toLong()
+		workStatusNo = data[i++].toLong()
+		partnerId = data[i++].toLong()
+		startDate = data[i++]
+		endDate = data[i++]
+		contractSalary = data[i++]
 		
 		readMetaCulumns(data, i)
 		

@@ -46,10 +46,8 @@ class CharSeparatedFileRepository<K extends Comparable<K>, E extends EntityBase<
 
 	Class<E> entityClass
 	
-	private BufferedReader reader
-
-	private BufferedWriter writer
-
+	String encoding = 'utf-8'
+	
 	// ====================================================
 	// メソッド
 	// ====================================================
@@ -64,37 +62,32 @@ class CharSeparatedFileRepository<K extends Comparable<K>, E extends EntityBase<
 	
 	private List<E> doFind(Closure matcher) {
 		try {
-			List<E> result = new ArrayList<E>()
-
-			openForRead()
-			String line
+			List<E> result = []
 
 			// マスタから1行ずつ読込み
-			while ((line = reader.readLine()) != null) {
+			masterFile.eachLine(encoding, { line ->
+				
 				E entity = toEntity(line)
-				if (!entity.isLogicalDeleted() && matcher.call(entity)) {
-
+				if (!entity.logicalDeleted && matcher.call(entity)) {
 					result.add(entity)
 				}
-			}
+			})
 
 			return result
 
 		} catch (IOException e) {
 			throw new SystemException('検索処理実行時にIO例外が発生しました。', e)
-		} finally {
-			close()
 		}
 	}
 
 	@Override
 	E findById(K id) {
 		def result = doFind {
-			ObjectUtils.equals(id, it.getId())
+			ObjectUtils.equals(id, it.id)
 		}
 
 		if (result.isEmpty()) {
-			throw new EntityNotFoundException('id = ' + id + 'のエンティティは存在しません。')
+			throw new EntityNotFoundException("id = $id のエンティティは存在しません。")
 		}
 
 		// TODO 一意性チェックはしていない
@@ -104,7 +97,7 @@ class CharSeparatedFileRepository<K extends Comparable<K>, E extends EntityBase<
 	@Override
 	List<E> findAll() {
 		doFind {
-			!it.isLogicalDeleted()
+			!it.logicalDeleted
 		}
 	}
 
@@ -131,7 +124,9 @@ class CharSeparatedFileRepository<K extends Comparable<K>, E extends EntityBase<
 			for (PropertyDescriptor prop in props) {
 				Method readMethod = prop.getReadMethod()
 				if (readMethod == null) continue
-				if (prop.getName().equals('class') || prop.getName().equals('persisted')) continue
+				if (prop.getName().equals('class') || 
+					prop.getName().equals('metaClass') || 
+					prop.getName().equals('persisted')) continue
 				
 				Object exampleValue = ReflectionUtils.invokeMethod(readMethod, example)
 				if (exampleValue == null) continue
@@ -152,20 +147,18 @@ class CharSeparatedFileRepository<K extends Comparable<K>, E extends EntityBase<
 
 	private void processUpdate(Closure fileUpdator) {
 		try {
-			openForWrite()
-
-			fileUpdator.call()
+			workFile.withWriter(encoding, { writer ->
+				fileUpdator.call(writer)
+			})
 
 		} catch (IOException e) {
 			throw new SystemException('削除処理実行時にIO例外が発生しました。', e)
-		} finally {
-			close()
 		}
 
 		commit()
 	}
 
-	private void writeEntity(E data) throws IOException {
+	private void writeEntity(E data, Writer writer) throws IOException {
 		String outputLine = fromEntity(data)
 		writer.write(outputLine)
 		writer.newLine()
@@ -175,18 +168,16 @@ class CharSeparatedFileRepository<K extends Comparable<K>, E extends EntityBase<
 	void create(final E data) {
 		if (data == null) throw new IllegalArgumentException('パラメーターが不正です。')
 
-		processUpdate {
+		processUpdate { writer ->
 			
-			String line
-
-			List<K> idList = new ArrayList<K>()
+			List<K> idList = []
 			// マスタから1行ずつ読込み
-			while ((line = reader.readLine()) != null) {
+			masterFile.eachLine(encoding, { line ->
 				E entity = toEntity(line)
 				idList.add(entity.getId())
 
-				writeEntity(entity)
-			}
+				writeEntity(entity, writer)
+			})
 
 			K maxId = Collections.max(idList)
 			data.setId(nextId(maxId))
@@ -215,63 +206,58 @@ class CharSeparatedFileRepository<K extends Comparable<K>, E extends EntityBase<
 		if (!data.isPersisted())
 			throw new IllegalArgumentException('パラメーターが永続化されていません。')
 
-		processUpdate {
-			String line
+		processUpdate {writer ->
 
 			// マスタから1行ずつ読込み
-			while ((line = reader.readLine()) != null) {
+			masterFile.eachLine(encoding, { line ->
 				E entity = toEntity(line)
 				if (data.getId().equals(entity.getId())) {
 					if (entity.isLogicalDeleted()) { // 既に論理削除済みの場合
-						throw new EntityNotFoundException('id = '
-								+ entity.getId() + 'のエンティティは既に論理削除されています。')
+						throw new EntityNotFoundException("id = ${entity.id} のエンティティは既に論理削除されています。")
 					}
 
 					data.preUpdate()
 					entity = data
 				}
 
-				writeEntity(entity)
-			}
+				writeEntity(entity,  writer)
+			})
 		}
 	}
 
 	@Override
 	void delete(final K id) {
-		processUpdate {
-			String line
+		processUpdate { writer ->
 			boolean deleted = false
 
 			// マスタから1行ずつ読込み
-			while ((line = reader.readLine()) != null) {
+			masterFile.eachLine(encoding, { line ->
 				E entity = toEntity(line)
-
+				
 				if (ObjectUtils.equals(id, entity.getId())) {
 					if (entity.isLogicalDeleted()) { // 既に論理削除済みの場合
-						throw new EntityNotFoundException('id = ' + id
-								+ 'のエンティティは既に論理削除されています。')
+						throw new EntityNotFoundException("id = $id のエンティティは既に論理削除されています。")
 					}
 
 					entity.logicalDelete()
 					deleted = true
 				}
 
-				writeEntity(entity)
-			}
-
+				writeEntity(entity, writer)
+			})
+			
 			if (!deleted) {
 				// パラメーターで指定されたエンティティが存在しなかった場合
-				throw new EntityNotFoundException('id = ' + id
-						+ 'のエンティティは存在しません。')
+				throw new EntityNotFoundException("id = $id のエンティティは存在しません。")
 			}
 		}
 	}
 
-	private String fromEntity(E entity) {
+	String fromEntity(E entity) {
 		return StringUtils.join(entity.toArray(), getSeparator())
 	}
 
-	private E toEntity(String line) {
+	E toEntity(String line) {
 
 		try {
 			E entity = entityClass.newInstance()
@@ -317,37 +303,6 @@ class CharSeparatedFileRepository<K extends Comparable<K>, E extends EntityBase<
 
 		} catch (IOException e) {
 			throw new SystemException('ワークファイルの変更をマスターファイルに反映できません。', e)
-		}
-	}
-
-	// NOTE
-	// 本来は全ファイルの内容をメモリ上に読み込んで処理したほうが簡単だが、
-	// オリジナルの実装を極力残すことにした。
-
-	private void openForWrite() throws IOException {
-		reader = new BufferedReader(new FileReader(masterFile))
-		writer = new BufferedWriter(new FileWriter(workFile))
-	}
-
-	private void openForRead() throws IOException {
-		reader = new BufferedReader(new FileReader(masterFile))
-	}
-
-	private void close() {
-		if (reader != null) {
-			try {
-				reader.close()
-			} catch (IOException e) {
-				e.printStackTrace()
-			}
-		}
-
-		if (writer != null) {
-			try {
-				writer.close()
-			} catch (IOException e) {
-				e.printStackTrace()
-			}
 		}
 	}
 

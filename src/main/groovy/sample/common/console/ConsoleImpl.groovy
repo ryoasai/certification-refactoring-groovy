@@ -18,7 +18,7 @@ class ConsoleImpl implements Console {
 
 	static final String DEFAULT_PROMPT_STRING = '>'
 	private String promptString = DEFAULT_PROMPT_STRING
-	
+
 	String getPromptString() {
 		return promptString
 	}
@@ -34,25 +34,25 @@ class ConsoleImpl implements Console {
 			println line // 機能一覧の表示
 		}
 	}
-	
+
 	@Override
 	void display(String... messages) {
 		for (String line in messages) {
 			println line // 機能一覧の表示
 		}
 	}
-	
+
 	@Override
 	boolean confirm(String message, String yes, String no) {
 		while (true) {
 			String input = accept('\n' + message + '\n[' + yes + ',' + no + ']' + promptString)
 			if (yes.equals(input)) return true
 			if (no.equals(input)) return false
-			
+
 			display('\n' + yes + 'か' + no + 'を入力してください。')
 		}
 	}
-	
+
 	@Override
 	String accept(String message) {
 		println message
@@ -60,12 +60,13 @@ class ConsoleImpl implements Console {
 
 		return doAcceptChars()
 	}
-	
+
 	@Override
 	String accept(String message, Closure validInput) {
-		while (true) { // 正しく入力されるまでループ
-			String input = accept(message); 
-		
+		while (true) {
+			// 正しく入力されるまでループ
+			String input = accept(message);
+
 			try {
 				if (validInput.call(input)) return input
 			} catch (Exception ex) {
@@ -75,12 +76,12 @@ class ConsoleImpl implements Console {
 			}
 		}
 	}
-	
+
 	@Override
 	int acceptInt(String message) {
 		while (true) {
 			try {
-				String input = accept(message); 
+				String input = accept(message);
 
 				return Integer.parseInt(input)
 			} catch (NumberFormatException e) {
@@ -92,9 +93,10 @@ class ConsoleImpl implements Console {
 
 	@Override
 	int acceptInt(String message, Closure validInput) {
-		while (true) { // 正しく入力されるまでループ
-			int input = acceptInt(message); 
-		
+		while (true) {
+			// 正しく入力されるまでループ
+			int input = acceptInt(message);
+
 			try {
 				if (validInput.call(input)) return input
 			} catch (Exception ex) {
@@ -105,12 +107,12 @@ class ConsoleImpl implements Console {
 		}
 	}
 
-	
+
 	@Override
 	long acceptLong(String message) {
 		while (true) {
 			try {
-				String input = accept(message); 
+				String input = accept(message);
 
 				return Long.parseLong(input)
 			} catch (NumberFormatException e) {
@@ -118,12 +120,13 @@ class ConsoleImpl implements Console {
 			}
 		}
 	}
-	
+
 	@Override
 	long acceptLong(String message, Closure validInput) {
-		while (true) { // 正しく入力されるまでループ
-			long input = acceptLong(message); 
-		
+		while (true) {
+			// 正しく入力されるまでループ
+			long input = acceptLong(message);
+
 			try {
 				if (validInput.call(input)) return input
 			} catch (Exception ex) {
@@ -134,17 +137,17 @@ class ConsoleImpl implements Console {
 		}
 	}
 
-	
+
 	@Override
 	Date acceptDate(String message) {
-		return acceptDate(message, 'yyyyMMdd')
+		acceptDate(message, 'yyyyMMdd')
 	}
 
-	
+
 	@Override
 	Date acceptDate(String message, String format) {
 		while (true) {
-			String input = accept(message); 
+			String input = accept(message);
 			SimpleDateFormat dateFormat = new SimpleDateFormat(format)
 			try {
 				return dateFormat.parse(input)
@@ -153,15 +156,15 @@ class ConsoleImpl implements Console {
 			}
 		}
 	}
-	
-	
+
+
 	@Override
 	String acceptFromNameIdList(List<? extends NameId<?>> selectList, String message) {
 		String result = null
-		while (true) { 
+		while (true) {
 			println message
 			print nameIdListToString(selectList) + promptString
-			
+
 			result = doAcceptChars()
 			if (isValidId(selectList, result)) {
 				return result
@@ -175,18 +178,18 @@ class ConsoleImpl implements Console {
 				return true
 			}
 		}
-		
+
 		false
 	}
-	
-	
+
+
 	private String nameIdListToString(List<? extends NameId<?>> nameIdList) {
 		StringBuilder buff = new StringBuilder()
 		for (NameId<?> partner : nameIdList) {
 			buff.append(partner.getId() + ' ' + partner.getName())
 			buff.append('\n')
 		}
-		
+
 		buff.append(' ['); // IDリストの表示
 		for (NameId<?> partner : nameIdList) {
 			buff.append(partner.getId())
@@ -194,19 +197,18 @@ class ConsoleImpl implements Console {
 		}
 		buff.deleteCharAt(buff.length() - 1); // 末尾の','を削除
 		buff.append(']')
-		
+
 		buff.toString()
 	}
 
 	@Override
-	String acceptFromIdList(List<? extends Identifiable<?>> selectList,
-			String message) {
-		
+	String acceptFromIdList(List<? extends Identifiable<?>> selectList, String message) {
+
 		String result = null
-		while (true) { 
+		while (true) {
 			println(message)
-			System.out.print(idListToString(selectList) + promptString)
-			
+			print(idListToString(selectList) + promptString)
+
 			result = doAcceptChars()
 			if (isValidId(selectList, result)) {
 				return result
@@ -214,14 +216,14 @@ class ConsoleImpl implements Console {
 		}
 	}
 
-	
+
 	private String idListToString(List<? extends Identifiable<?>> idList) {
 		StringBuilder buff = new StringBuilder()
 		for (Identifiable<?> partner : idList) {
 			buff.append(partner.getId())
 			buff.append('\n')
 		}
-		
+
 		buff.append(' ['); // IDリストの表示
 		for (Identifiable<?> partner : idList) {
 			buff.append(partner.getId())
@@ -229,59 +231,30 @@ class ConsoleImpl implements Console {
 		}
 		buff.deleteCharAt(buff.length() - 1); // 末尾の','を削除
 		buff.append(']')
-		
+
 		buff.toString()
 	}
 
 	@Override
 	String acceptFromList(List<String> selectList, String message) {
 		String result = null
-		while (true) { 
+		while (true) {
 			println message
-			print selectList + promptString
-			
+			print selectList.toString() + promptString
+
 			result = doAcceptChars()
 			if (selectList.contains(result)) return result
 		}
 	}
-	
-	
+
+
 	/**
 	 * キーボードからの入力受取り
 	 * 
 	 * @return 入力文字列
 	 */
 	private String doAcceptChars() {
-		int c
-		StringBuilder sb = new StringBuilder()
-		try {
-			InputStreamReader isr = new InputStreamReader(System.in,
-					System.getProperty('file.encoding'))
-			while (true) {
-				c = isr.read()
-				if (c == '\n') {
-					return sb.toString()
-				} else if (c == '\r') {
-					c = isr.read()
-					if (c == '\n') {
-						return sb.toString()
-					} else {
-						sb.append('\r')
-						sb.append((char) c)
-					}
-				} else {
-					sb.append((char) c)
-				}
-				
-				if (c == -1) break
-			}
-			
-			isr.close()
-			
-		} catch (IOException e) {
-			System.err.println("入力受取りエラー: + $e.message")
-		}
-		
-		return null
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in))
+		br.readLine()
 	}
 }

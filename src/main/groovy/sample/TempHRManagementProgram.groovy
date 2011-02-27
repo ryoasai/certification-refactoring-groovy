@@ -36,8 +36,8 @@ class TempHRManagementProgram extends AbstractMainProgram {
 
 	@Override
 	protected String printMenuAndWaitForInput() {
-		console.display(''); //改行
-		console.display(MENU_LIST)
+		console.display '' //改行
+		console.display MENU_LIST
 		return console.acceptFromList(CODE_LIST, 'どの機能を実行しますか？')
 	}
 	

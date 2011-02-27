@@ -53,13 +53,14 @@ class DeleteWorkFunction implements Function {
 
 		if (console.confirm('この情報を削除しますか？(Y はい　N いいえ)', 'Y', 'N')) {
 			workRepository.delete(new WorkKey(hrId, Long.parseLong(workId)))
-			console.display('削除しました。'); 
+			console.display '削除しました。'		
 		}
 	}
 
 	private List<Work> findWorkListByHRId(long hrId) {
 		Work workExample = new Work()
-		workExample.setHrId(hrId)
+		workExample.hrId = hrId
+		
 		workRepository.findByExample(workExample)
 	}
 

@@ -16,14 +16,11 @@ class Occupation extends EntityBase<Long> implements NameId<Long> {
 	@Override
 	String[] toArray() {
 			
-		List<String> dataList = 
-			new ArrayList<String>(
-					Arrays.asList(
-							String.valueOf(getId()),
-							getName()))
+		def dataList = [
+			String.valueOf(getId()), getName()]
 		
 		dataList.addAll(createDateColumns())
-		return dataList.toArray(new String[dataList.size()])
+		dataList.toArray()
 	}
 
 
@@ -31,8 +28,8 @@ class Occupation extends EntityBase<Long> implements NameId<Long> {
 	void fromArray(String[] data) {
 		int i = 0
 
-		setId(Long.parseLong(data[i++]))
-		setName(data[i++])
+		id = data[i++].toLong()
+		name = data[i++]
 
 		readMetaCulumns(data, i)
 	}	

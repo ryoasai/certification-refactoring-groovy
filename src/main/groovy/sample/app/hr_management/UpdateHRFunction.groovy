@@ -28,7 +28,7 @@ class UpdateHRFunction implements Function {
 	@Inject
 	Console console
 	
-	private HumanResource selectedHumanResource
+	private def selectedHumanResource
 
 	/**
 	 * 人材管理(更新)メニューの実行
@@ -38,8 +38,8 @@ class UpdateHRFunction implements Function {
 		
 		int itemNo = inputItemNo()
 		if (itemNo < 1 || itemNo > 12) { // 項目番号入力エラー
-			console.display('項目番号の入力が正しくありません。')
-			console.display('更新できませんでした。')
+			console.display '項目番号の入力が正しくありません。'
+			console.display '更新できませんでした。'
 			return
 		}
 
@@ -57,7 +57,7 @@ class UpdateHRFunction implements Function {
 
 		selectedHumanResource = hrRepository.findById(hrId)
 		
-		hrView.display(selectedHumanResource)
+		hrView.display selectedHumanResource
 	}
 	
 	
@@ -67,11 +67,11 @@ class UpdateHRFunction implements Function {
 		
 		displayMenuItems(sb)
 
-		return console.acceptInt(sb.toString())
+		console.acceptInt(sb.toString())
 	}
 
 	private void displayMenuItems(StringBuilder buff) {
-		for (int i = 1; i < HumanResourceView.FIELDS.size(); i++) {
+		for (i in 1..< HumanResourceView.FIELDS.size()) {
 			buff.append(i + '.' + HumanResourceView.FIELDS[i])
 			// TODO かなり醜いロジックだが、現状のロジックを保存しておく。
 			// 本来はタブ位置を汎用的に自動調整するロジックを書くべき

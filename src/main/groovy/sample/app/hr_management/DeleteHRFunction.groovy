@@ -25,7 +25,7 @@ class DeleteHRFunction implements Function {
 	@Inject
 	HumanResourceView hrView
 	
-	private HumanResource selectedHumanResource
+	private def selectedHumanResource
 
 	/**
 	 * 人材管理(削除)メニューの実行
@@ -50,8 +50,9 @@ class DeleteHRFunction implements Function {
 	
 	private void deleteHumanResource() {
 		if (console.confirm('この人材情報を削除しますか？(Y はい　N いいえ)', 'Y', 'N')) {
-			hrRepository.delete(selectedHumanResource.getId())
-			console.display('削除しました。') 
+			hrRepository.delete(selectedHumanResource.id)
+			
+			console.display '削除しました。'
 		}
 	}
 

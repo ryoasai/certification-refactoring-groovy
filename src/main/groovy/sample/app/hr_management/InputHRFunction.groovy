@@ -25,7 +25,7 @@ class InputHRFunction implements Function {
 	@Inject
 	Console console
 	
-	private HumanResource selectedHumanResource
+	private def selectedHumanResource
 
 	/**
 	 * 人材管理(追加)の実行
@@ -37,7 +37,7 @@ class InputHRFunction implements Function {
 		
 		hrRepository.create(selectedHumanResource)
 
-		console.display("人材ID： $selectedHumanResource.idで登録されました。")
+		console.display "人材ID： ${selectedHumanResource.id}で登録されました。"
 	}
 
 	/**
@@ -50,16 +50,16 @@ class InputHRFunction implements Function {
 	String[] inputData() {
 		String[] data = new String[HumanResourceView.FIELDS.size()]
 		
-		for (int i = 1; i < HumanResourceView.FIELDS.size(); i++) {
+		for (i in 1 ..< HumanResourceView.FIELDS.size()) {
 			if (HumanResourceView.FIELDS[i].equals('性別')) {
-				data[i] = console.accept("$HumanResourceView.FIELDS[i]を入力してください。", {input ->
+				data[i] = console.accept("${HumanResourceView.FIELDS[i]}を入力してください。", {input ->
 					'M'.equals(input) || 'F'.equals(input)
 				})
 			
 			} else if (HumanResourceView.FIELDS[i].equals('業種')) {
-				data[i] = console.acceptFromIdList(occupationRespository.findAll(), "$HumanResourceView.FIELDS[i]を入力してください。")
+				data[i] = console.acceptFromIdList(occupationRespository.findAll(), "${HumanResourceView.FIELDS[i]}を入力してください。")
 			} else {
-				data[i] = console.accept("$HumanResourceView.FIELDS[i]を入力してください。")
+				data[i] = console.accept("${HumanResourceView.FIELDS[i]}を入力してください。")
 			}
 		}
 		

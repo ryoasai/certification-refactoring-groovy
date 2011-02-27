@@ -50,8 +50,8 @@ class SearchHRListFunction extends AbstractDispatcher implements Function {
 	
 	@Override
 	protected String printMenuAndWaitForInput() {
-		console.display('')
-		console.display(MENU_LIST)
+		console.display ''
+		console.display MENU_LIST
 		
 		console.acceptFromList(CODE_LIST, 'どの機能を実行しますか？')
 	}

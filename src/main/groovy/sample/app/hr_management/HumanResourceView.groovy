@@ -41,13 +41,13 @@ class HumanResourceView implements View<HumanResource> {
 		
 		String occupationName = getOccupationName(hr.getOccupationId())
 		
-		console.display('') // 改行
+		console.display '' // 改行
 		String[] hrArray = hr.toArray()
 		
 		// 人材情報の表示
 		// TODO かなり醜いコード
-		for (int i = 0; i < FIELDS.size(); i++) {
-			StringBuilder sb = new StringBuilder(FIELDS[i] + ' : ')
+		for (i in 0..< FIELDS.size()) {
+			StringBuilder sb = new StringBuilder("$FIELDS[i]  : ")
 			
 			if (i == 8) { // 性別の表示
 				if (hrArray[i].equals('M')) {
@@ -74,7 +74,7 @@ class HumanResourceView implements View<HumanResource> {
 				sb.append('\t ')
 			}
 			
-			console.display(sb.toString())
+			console.display sb.toString()
 		}
 	}
 	
@@ -90,7 +90,7 @@ class HumanResourceView implements View<HumanResource> {
 		
 			if (occupation == null) return null
 			
-			occupation.getName()
+			occupation.name
 		} catch (NumberFormatException ex) {
 			null
 		}

@@ -29,23 +29,21 @@ class Partner extends Party {
 	@Override
 	String[] toArray() {
 			
-		List<String> dataList = 
-			new ArrayList<String>(
-					Arrays.asList(
-							String.valueOf(getId()),
-							getName(),
-							getPostalCode(),
-							getAddress(),
-							getTelephoneNo(),
-							getFaxNo(),
-							getUrl(),
-							getPersonInCharge(),
-							getEmail(),
-							getCutoffDay(),
-							getPaymentDay()))
+		def dataList = [
+			id,
+			name,
+			postalCode,
+			address,
+			telephoneNo,
+			faxNo,
+			url,
+			personInCharge,
+			email,
+			cutoffDay,
+			paymentDay]
 		
 		dataList.addAll(createDateColumns())
-		return dataList.toArray(new String[dataList.size()])
+		dataList.toArray()
 	}
 
 
@@ -53,17 +51,17 @@ class Partner extends Party {
 	void fromArray(String[] data) {
 		int i = 0
 
-		setId(Long.parseLong(data[i++]))
-		setName(data[i++])
-		setPostalCode(data[i++])
-		setAddress(data[i++])
-		setTelephoneNo(data[i++])
-		setFaxNo(data[i++])
-		setUrl(data[i++])
-		setEmail(data[i++])
-		setPersonInCharge(data[i++])
-		setCutoffDay(data[i++])
-		setPaymentDay(data[i++])
+		id = data[i++].toLong()
+		name = data[i++]
+		postalCode = data[i++]
+		address = data[i++]
+		telephoneNo = data[i++]
+		faxNo = data[i++]
+		url = data[i++]
+		email = data[i++]
+		personInCharge = data[i++]
+		cutoffDay = data[i++]
+		paymentDay = data[i++]
 
 		readMetaCulumns(data, i)
 	}	

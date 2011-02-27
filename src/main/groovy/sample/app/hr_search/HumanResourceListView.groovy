@@ -117,8 +117,8 @@ class HumanResourceListView extends AbstractDispatcher implements View<List<Huma
 
 	@Override
 	protected String printMenuAndWaitForInput() {
-		console.display(''); // 改行
-		console.display(MENU_LIST); // 機能一覧の表示
+		console.display ''; // 改行
+		console.display MENU_LIST; // 機能一覧の表示
 		
 		console.acceptFromList(CODE_LIST, '')
 	}
@@ -136,7 +136,7 @@ class HumanResourceListView extends AbstractDispatcher implements View<List<Huma
 		console.display('検索結果一覧')
 		int count = 0; // 表示件数
 
-		for (int i = (page - 1) * 10; i < page * 10; i++) {
+		for (i in ((page - 1) * 10) ..< (page * 10)) {
 			if (i >= hrList.size()) break
 			
 			HumanResource hr = hrList.get(i)
@@ -164,16 +164,16 @@ class HumanResourceListView extends AbstractDispatcher implements View<List<Huma
 
 			// 人材IDのセット
 			if (hr == null) { // 人材情報を表示
-				console.display('入力された人材情報は登録されていません。')
+				console.display '入力された人材情報は登録されていません。'
 			}
 			
-			console.display('\n稼働状況---------------------------------------------')
-			workListView.display(findWorkListByHRId(hr.getId()))
+			console.display '\n稼働状況---------------------------------------------'
+			workListView.display(findWorkListByHRId(hr.id))
 			
-			console.accept('エンターキーを押すと検索結果一覧に戻ります。')
+			console.accept 'エンターキーを押すと検索結果一覧に戻ります。'
 			
 		} catch (NumberFormatException e) {
-			console.display('入力された人材情報は登録されていません。')
+			console.display '入力された人材情報は登録されていません。'
 		}
 	}
 	

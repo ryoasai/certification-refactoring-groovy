@@ -29,7 +29,7 @@ abstract class AbstractMainProgram extends AbstractDispatcher implements MainPro
 	}
 	
 	protected boolean isConfirm(String inputCode) {
-		return !'S'.equals(inputCode)
+		!'S'.equals(inputCode)
 	}
 
 	/**

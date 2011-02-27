@@ -49,9 +49,9 @@ class WorkListView implements View<List<Work>> {
 		for (Work work : workList.subList(0, Math.min(workList.size(), DISPLAY_LIMIT))) {
 
 			console.display(
-					work.getWorkStatusNo() + '\t' + 
-					work.getStartDate() + '～' + work.getEndDate() + '\t' + 
-					getPartnerName(work.getPartnerId()))
+					work.workStatusNo + '\t' + 
+					work.startDate + '～' + work.endDate + '\t' + 
+					getPartnerName(work.partnerId))
 		}
 	}
 	
@@ -68,7 +68,7 @@ class WorkListView implements View<List<Work>> {
 			
 			if (partner == null) return null
 			
-			partner.getName()
+			partner.name
 			
 		} catch (NumberFormatException ex) {
 			null

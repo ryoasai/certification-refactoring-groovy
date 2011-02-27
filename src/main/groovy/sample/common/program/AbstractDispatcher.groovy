@@ -22,7 +22,7 @@ abstract class AbstractDispatcher implements Runnable {
 	protected void beforeDisplayMenu() {}
 
 	protected boolean isEndCommand(String inputCode) {
-		return 'E'.equals(inputCode)
+		'E'.equals(inputCode)
 	}
 
 	protected abstract String printMenuAndWaitForInput()

@@ -33,45 +33,42 @@ class HumanResource extends Party {
 
 	@Override
 	String[] toArray() {
-			
-		List<String> dataList = 
-			new ArrayList<String>(
-					Arrays.asList(
-							String.valueOf(getId()),
-							getName(),
-							getPostalCode(),
-							getAddress(),
-							getTelephoneNo(),
-							getFaxNo(),
-							getEmail(),
-							getBirthDay(),
-							getGenderType(),
-							String.valueOf(getOccupationId()),
-							getYearOfExperience(),
-							getSchoolBackground(),
-							getRequestedSalary()))
+		def dataList = [
+			String.valueOf(id),
+			name,
+			postalCode,
+			address,
+			telephoneNo,
+			faxNo,
+			email,
+			birthDay,
+			genderType,
+			occupationId,
+			yearOfExperience,
+			schoolBackground,
+			requestedSalary]
 		
 		dataList.addAll(createDateColumns())
-		return dataList.toArray(new String[dataList.size()])
+		dataList.toArray()
 	}
 
 	@Override
 	void fromArray(String[] data) {
 		int i = 0
 
-		setId(Long.parseLong(data[i++]))
-		setName(data[i++])
-		setPostalCode(data[i++])
-		setAddress(data[i++])
-		setTelephoneNo(data[i++])
-		setFaxNo(data[i++])
-		setEmail(data[i++])
-		setBirthDay(data[i++])
-		setGenderType(data[i++])
-		setOccupationId(Long.valueOf(data[i++]))
-		setYearOfExperience(data[i++])
-		setSchoolBackground(data[i++])
-		setRequestedSalary(data[i++])
+		id = data[i++].toLong()
+		name = data[i++]
+		postalCode = data[i++]
+		address = data[i++]
+		telephoneNo = data[i++]
+		faxNo = data[i++]
+		email = data[i++]
+		birthDay = data[i++]
+		genderType = data[i++]
+		occupationId = data[i++].toLong()
+		yearOfExperience = data[i++]
+		schoolBackground = data[i++]
+		requestedSalary = data[i++]
 
 		readMetaCulumns(data, i)
 	}	

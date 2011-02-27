@@ -50,11 +50,11 @@ class InputWorkFunction implements Function {
 			hrRepository.findById(input) != null // 人材ID存在チェック
 		})
 
-		work.setHrId(hrId)
-		work.setPartnerId(Long.valueOf(console.acceptFromNameIdList(partnerRepository.findAll(), '取引先を選択してください。')))
-		work.setStartDate(console.accept('稼動開始日を入力してください。'))
-		work.setEndDate(console.accept('稼動終了日を入力してください。'))
-		work.setContractSalary(console.accept('契約単価を入力してください。'))
+		work.hrId = hrId
+		work.partnerId = console.acceptFromNameIdList(partnerRepository.findAll(), '取引先を選択してください。')
+		work.startDate = console.accept('稼動開始日を入力してください。')
+		work.endDate = console.accept('稼動終了日を入力してください。')
+		work.contractSalary = console.accept('契約単価を入力してください。')
 		
 		work
 	}
@@ -65,7 +65,7 @@ class InputWorkFunction implements Function {
 	private void doCreate(Work work) {
 		workRepository.create(work)
 		
-		console.display('登録されました。')
+		console.display '登録されました。'
 	}
 
 }

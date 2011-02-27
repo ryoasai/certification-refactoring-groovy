@@ -48,11 +48,11 @@ abstract class EntityBase<K> implements ArrayConvertable, Identifiable<K> {
 
 	protected String formatDate(Date date) {
 		SimpleDateFormat dateFormat = createDateFormat()
-		return dateFormat.format(date)
+		dateFormat.format(date)
 	}
 
 	protected SimpleDateFormat createDateFormat() {
-		return new SimpleDateFormat('yyyyMMdd')
+		new SimpleDateFormat('yyyyMMdd')
 	}
 
 	protected Date parseDate(String dateStr) {
