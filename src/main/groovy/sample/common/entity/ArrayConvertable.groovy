@@ -1,4 +1,4 @@
-﻿package sample.common.entity
+package sample.common.entity
 
 interface ArrayConvertable {
 

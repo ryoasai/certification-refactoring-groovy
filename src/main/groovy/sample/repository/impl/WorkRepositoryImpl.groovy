@@ -1,4 +1,4 @@
-﻿package sample.repository.impl
+package sample.repository.impl
 
 import java.io.File
 
@@ -27,3 +27,4 @@ class WorkRepositoryImpl extends CharSeparatedFileRepository<WorkKey, Work> impl
 		println(workFile)
 	}
 }
+

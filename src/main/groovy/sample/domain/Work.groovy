@@ -6,6 +6,7 @@ import java.util.List
 
 import sample.common.entity.EntityBase
 
+
 /**
  * 稼動状況エンティティ
  */

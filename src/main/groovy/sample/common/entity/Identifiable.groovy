@@ -1,6 +1,7 @@
-﻿package sample.common.entity
+package sample.common.entity
 
 interface Identifiable<K> {
 
 	K getId()
 }
+

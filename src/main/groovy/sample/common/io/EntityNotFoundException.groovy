@@ -1,7 +1,6 @@
-﻿package sample.common.io
+package sample.common.io
 
 import sample.common.SystemException
-
 
 class EntityNotFoundException extends SystemException {
 	private static final long serialVersionUID = 1L

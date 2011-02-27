@@ -1,4 +1,4 @@
-﻿package sample.app.work_management
+package sample.app.work_management
 
 
 import java.util.List
@@ -20,7 +20,7 @@ import sample.repository.PartnerRepository
  */
 @Component
 class WorkListView implements View<List<Work>> {
-	
+
 	private static final int DISPLAY_LIMIT = 100
 
 	@Inject

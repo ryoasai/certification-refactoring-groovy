@@ -4,3 +4,4 @@ interface NameId<K> extends Identifiable<K> {
 
 	String getName()
 }
+

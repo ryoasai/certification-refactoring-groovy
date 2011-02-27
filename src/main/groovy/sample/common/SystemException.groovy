@@ -1,4 +1,4 @@
-﻿package sample.common
+package sample.common
 
 class SystemException extends RuntimeException {
 
@@ -19,5 +19,4 @@ class SystemException extends RuntimeException {
 	SystemException(Throwable cause) {
 		super(cause)
 	}
-
 }

@@ -1,4 +1,4 @@
-﻿package sample.repository.impl
+package sample.repository.impl
 
 import java.io.File
 
@@ -22,6 +22,5 @@ class OccupationRepositoryImpl extends CharSeparatedFileRepository<Long, Occupat
 		setMasterFile(masterFile)
 		setWorkFile(workFile)
 	}
-	
 
 }

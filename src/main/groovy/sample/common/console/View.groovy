@@ -1,4 +1,4 @@
-﻿package sample.common.console
+package sample.common.console
 
 interface View<T> {
 

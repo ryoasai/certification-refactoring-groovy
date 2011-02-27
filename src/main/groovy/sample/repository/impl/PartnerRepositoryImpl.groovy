@@ -1,4 +1,4 @@
-﻿package sample.repository.impl
+package sample.repository.impl
 
 import java.io.File
 
@@ -23,3 +23,4 @@ class PartnerRepositoryImpl extends CharSeparatedFileRepository<Long, Partner> i
 		setWorkFile(workFile)
 	}
 }
+

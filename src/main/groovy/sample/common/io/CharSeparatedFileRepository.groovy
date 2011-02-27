@@ -1,4 +1,4 @@
-﻿package sample.common.io
+package sample.common.io
 
 import java.beans.PropertyDescriptor
 import java.io.BufferedReader
@@ -361,6 +361,4 @@ class CharSeparatedFileRepository<K extends Comparable<K>, E extends EntityBase<
 		}
 	}
 
-	def test2() {
-	}
 }
