@@ -1,26 +1,26 @@
-package sample.domain
+ï»¿package sample.domain
 
 import sample.common.entity.EntityBase
 import sample.common.entity.NameId
 
 abstract class Party extends EntityBase<Long> implements NameId<Long> {
 
-	/** –¼ */
+	/** æ°å */
 	String name
 
-	/** —X•Ö”Ô† */
+	/** éƒµä¾¿ç•ªå· */
 	String postalCode
 
-	/** ZŠ */
+	/** ä½æ‰€ */
 	String address
 
-	/** “d˜b”Ô† */
+	/** é›»è©±ç•ªå· */
 	String telephoneNo
 
-	/** FAX”Ô† */
+	/** FAXç•ªå· */
 	String faxNo
 
-	/** emailƒAƒhƒŒƒX */
+	/** emailã‚¢ãƒ‰ãƒ¬ã‚¹ */
 	String email
 
 }

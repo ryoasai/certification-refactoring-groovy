@@ -1,4 +1,4 @@
-package sample.common.program
+Ôªøpackage sample.common.program
 
 abstract class AbstractDispatcher implements Runnable {
 
@@ -11,7 +11,7 @@ abstract class AbstractDispatcher implements Runnable {
 			String inputCode = printMenuAndWaitForInput()
 
 			if (isEndCommand(inputCode)) {
-				// èIóπ
+				// ÁµÇ‰∫Ü
 				break
 			}
 			

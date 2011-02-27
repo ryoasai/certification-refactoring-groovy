@@ -1,4 +1,4 @@
-package sample.domain
+ï»¿package sample.domain
 
 import java.util.ArrayList
 import java.util.Arrays
@@ -12,17 +12,17 @@ class Partner extends Party {
 	String url
 
 	/**
-	 * ’S“–Ò
+	 * æ‹…å½“è€…
 	 */
 	String personInCharge
 
 	/**
-	 * ’÷‚ß“ú
+	 * ç· ã‚æ—¥
 	 */
 	String cutoffDay
 
 	/**
-	 * x•¥‚¢“ú
+	 * æ”¯æ‰•ã„æ—¥
 	 */
 	String paymentDay
 

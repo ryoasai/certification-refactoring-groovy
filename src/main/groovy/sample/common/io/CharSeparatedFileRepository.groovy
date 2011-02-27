@@ -1,4 +1,4 @@
-package sample.common.io
+ï»¿package sample.common.io
 
 import java.beans.PropertyDescriptor
 import java.io.BufferedReader
@@ -28,14 +28,14 @@ import sample.common.entity.EntityBase
 import sample.common.entity.Sequence
 
 /**
- * ‹æØ‚è•¶š‚ğg‚Á‚½ƒeƒLƒXƒgƒtƒ@ƒCƒ‹ã‚Ìƒf[ƒ^‚ğ“Ç‚İ‘‚«‚·‚é‚½‚ß‚ÌƒŒƒ|ƒWƒgƒŠ[À‘•ƒNƒ‰ƒX‚Å‚·B
- * ‚±‚ÌƒNƒ‰ƒX‚ÍƒXƒe[ƒg‚ğ‚¿ƒXƒŒƒbƒhƒZ[ƒt‚Å‚Í‚È‚¢“_‚É’ˆÓ‚·‚é‚±‚ÆB
+ * åŒºåˆ‡ã‚Šæ–‡å­—ã‚’ä½¿ã£ãŸãƒ†ã‚­ã‚¹ãƒˆãƒ•ã‚¡ã‚¤ãƒ«ä¸Šã®ãƒ‡ãƒ¼ã‚¿ã‚’èª­ã¿æ›¸ãã™ã‚‹ãŸã‚ã®ãƒ¬ãƒã‚¸ãƒˆãƒªãƒ¼å®Ÿè£…ã‚¯ãƒ©ã‚¹ã§ã™ã€‚
+ * ã“ã®ã‚¯ãƒ©ã‚¹ã¯ã‚¹ãƒ†ãƒ¼ãƒˆã‚’æŒã¡ã‚¹ãƒ¬ãƒƒãƒ‰ã‚»ãƒ¼ãƒ•ã§ã¯ãªã„ç‚¹ã«æ³¨æ„ã™ã‚‹ã“ã¨ã€‚
  */
 class CharSeparatedFileRepository<K extends Comparable<K>, E extends EntityBase<K>> implements
 		Repository<K, E> {
 
 	// ====================================================
-	// ƒtƒB[ƒ‹ƒh
+	// ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰
 	// ====================================================
 
 	File masterFile
@@ -51,14 +51,14 @@ class CharSeparatedFileRepository<K extends Comparable<K>, E extends EntityBase<
 	private BufferedWriter writer
 
 	// ====================================================
-	// ƒƒ\ƒbƒh
+	// ãƒ¡ã‚½ãƒƒãƒ‰
 	// ====================================================
 
 	@PostConstruct
 	void init() {
 		if (entityClass != null) return
 		
-		// eƒNƒ‰ƒX‚Ì‘Ìƒpƒ‰ƒ[ƒ^‚ÌŒ^‚ğæ“¾
+		// è¦ªã‚¯ãƒ©ã‚¹ã®ç·ç§°ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ã®å‹ã‚’å–å¾—
 		entityClass = (Class<E>)((ParameterizedType)getClass().getGenericSuperclass()).getActualTypeArguments()[1]
 	}
 	
@@ -69,7 +69,7 @@ class CharSeparatedFileRepository<K extends Comparable<K>, E extends EntityBase<
 			openForRead()
 			String line
 
-			// ƒ}ƒXƒ^‚©‚ç1s‚¸‚Â“Ç‚İ
+			// ãƒã‚¹ã‚¿ã‹ã‚‰1è¡Œãšã¤èª­è¾¼ã¿
 			while ((line = reader.readLine()) != null) {
 				E entity = toEntity(line)
 				if (!entity.isLogicalDeleted() && matcher.call(entity)) {
@@ -81,7 +81,7 @@ class CharSeparatedFileRepository<K extends Comparable<K>, E extends EntityBase<
 			return result
 
 		} catch (IOException e) {
-			throw new SystemException('ŒŸõˆ—Às‚ÉIO—áŠO‚ª”­¶‚µ‚Ü‚µ‚½B', e)
+			throw new SystemException('æ¤œç´¢å‡¦ç†å®Ÿè¡Œæ™‚ã«IOä¾‹å¤–ãŒç™ºç”Ÿã—ã¾ã—ãŸã€‚', e)
 		} finally {
 			close()
 		}
@@ -94,10 +94,10 @@ class CharSeparatedFileRepository<K extends Comparable<K>, E extends EntityBase<
 		}
 
 		if (result.isEmpty()) {
-			throw new EntityNotFoundException('id = ' + id + '‚ÌƒGƒ“ƒeƒBƒeƒB‚Í‘¶İ‚µ‚Ü‚¹‚ñB')
+			throw new EntityNotFoundException('id = ' + id + 'ã®ã‚¨ãƒ³ãƒ†ã‚£ãƒ†ã‚£ã¯å­˜åœ¨ã—ã¾ã›ã‚“ã€‚')
 		}
 
-		// TODO ˆêˆÓ«ƒ`ƒFƒbƒN‚Í‚µ‚Ä‚¢‚È‚¢
+		// TODO ä¸€æ„æ€§ãƒã‚§ãƒƒã‚¯ã¯ã—ã¦ã„ãªã„
 		result.get(0)
 	}
 
@@ -135,11 +135,11 @@ class CharSeparatedFileRepository<K extends Comparable<K>, E extends EntityBase<
 				
 				Object exampleValue = ReflectionUtils.invokeMethod(readMethod, example)
 				if (exampleValue == null) continue
-				if (exampleValue instanceof Long && (Long)(exampleValue) == 0) continue; // Šî–{Œ^‚Ìlong‚Ì0‚Í–³‹i‚¢‚Ü‚¢‚¿j
+				if (exampleValue instanceof Long && (Long)(exampleValue) == 0) continue; // åŸºæœ¬å‹ã®longã®0ã¯ç„¡è¦–ï¼ˆã„ã¾ã„ã¡ï¼‰
 	
 				Object targetValue = ReflectionUtils.invokeMethod(readMethod, it)
 	
-				if (targetValue instanceof String && exampleValue instanceof String) { // •”•ª•¶š—ñˆê’v
+				if (targetValue instanceof String && exampleValue instanceof String) { // éƒ¨åˆ†æ–‡å­—åˆ—ä¸€è‡´
 					if ( ! ((String)targetValue).contains((String)exampleValue)) return false
 				} else {
 					if (!ObjectUtils.equals(exampleValue, targetValue)) return false
@@ -157,7 +157,7 @@ class CharSeparatedFileRepository<K extends Comparable<K>, E extends EntityBase<
 			fileUpdator.call()
 
 		} catch (IOException e) {
-			throw new SystemException('íœˆ—Às‚ÉIO—áŠO‚ª”­¶‚µ‚Ü‚µ‚½B', e)
+			throw new SystemException('å‰Šé™¤å‡¦ç†å®Ÿè¡Œæ™‚ã«IOä¾‹å¤–ãŒç™ºç”Ÿã—ã¾ã—ãŸã€‚', e)
 		} finally {
 			close()
 		}
@@ -173,7 +173,7 @@ class CharSeparatedFileRepository<K extends Comparable<K>, E extends EntityBase<
 
 	@Override
 	void create(final E data) {
-		if (data == null) throw new IllegalArgumentException('ƒpƒ‰ƒ[ƒ^[‚ª•s³‚Å‚·B')
+		if (data == null) throw new IllegalArgumentException('ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ãƒ¼ãŒä¸æ­£ã§ã™ã€‚')
 
 		processUpdate {
 			
@@ -182,7 +182,7 @@ class CharSeparatedFileRepository<K extends Comparable<K>, E extends EntityBase<
 				String line
 
 				List<K> idList = new ArrayList<K>()
-				// ƒ}ƒXƒ^‚©‚ç1s‚¸‚Â“Ç‚İ
+				// ãƒã‚¹ã‚¿ã‹ã‚‰1è¡Œãšã¤èª­è¾¼ã¿
 				while ((line = reader.readLine()) != null) {
 					E entity = toEntity(line)
 					idList.add(entity.getId())
@@ -193,7 +193,7 @@ class CharSeparatedFileRepository<K extends Comparable<K>, E extends EntityBase<
 				K maxId = Collections.max(idList)
 				data.setId(nextId(maxId))
 
-				data.preCreate(); // XVAì¬“ú•t‚Ì”­s
+				data.preCreate(); // æ›´æ–°ã€ä½œæˆæ—¥ä»˜ã®ç™ºè¡Œ
 				writeEntity(data)
 			}
 
@@ -207,7 +207,7 @@ class CharSeparatedFileRepository<K extends Comparable<K>, E extends EntityBase<
 		} else if (maxId instanceof Sequence) {
 			return ((Sequence<K>)maxId).next()
 		} else {
-			throw new IllegalArgumentException('©“®Ì”Ô‚Å‚«‚Ü‚¹‚ñB')
+			throw new IllegalArgumentException('è‡ªå‹•æ¡ç•ªã§ãã¾ã›ã‚“ã€‚')
 		}
 	}
 
@@ -215,22 +215,22 @@ class CharSeparatedFileRepository<K extends Comparable<K>, E extends EntityBase<
 	@Override
 	void update(final E data) {
 		if (data == null)
-			throw new IllegalArgumentException('ƒpƒ‰ƒ[ƒ^[‚ª•s³‚Å‚·B')
+			throw new IllegalArgumentException('ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ãƒ¼ãŒä¸æ­£ã§ã™ã€‚')
 		if (!data.isPersisted())
-			throw new IllegalArgumentException('ƒpƒ‰ƒ[ƒ^[‚ª‰i‘±‰»‚³‚ê‚Ä‚¢‚Ü‚¹‚ñB')
+			throw new IllegalArgumentException('ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ãƒ¼ãŒæ°¸ç¶šåŒ–ã•ã‚Œã¦ã„ã¾ã›ã‚“ã€‚')
 
 		processUpdate {
 			@Override
 			void handle() throws IOException {
 				String line
 
-				// ƒ}ƒXƒ^‚©‚ç1s‚¸‚Â“Ç‚İ
+				// ãƒã‚¹ã‚¿ã‹ã‚‰1è¡Œãšã¤èª­è¾¼ã¿
 				while ((line = reader.readLine()) != null) {
 					E entity = toEntity(line)
 					if (data.getId().equals(entity.getId())) {
-						if (entity.isLogicalDeleted()) { // Šù‚É˜_—íœÏ‚İ‚Ìê‡
+						if (entity.isLogicalDeleted()) { // æ—¢ã«è«–ç†å‰Šé™¤æ¸ˆã¿ã®å ´åˆ
 							throw new EntityNotFoundException('id = '
-									+ entity.getId() + '‚ÌƒGƒ“ƒeƒBƒeƒB‚ÍŠù‚É˜_—íœ‚³‚ê‚Ä‚¢‚Ü‚·B')
+									+ entity.getId() + 'ã®ã‚¨ãƒ³ãƒ†ã‚£ãƒ†ã‚£ã¯æ—¢ã«è«–ç†å‰Šé™¤ã•ã‚Œã¦ã„ã¾ã™ã€‚')
 						}
 
 						data.preUpdate()
@@ -251,14 +251,14 @@ class CharSeparatedFileRepository<K extends Comparable<K>, E extends EntityBase<
 				String line
 				boolean deleted = false
 
-				// ƒ}ƒXƒ^‚©‚ç1s‚¸‚Â“Ç‚İ
+				// ãƒã‚¹ã‚¿ã‹ã‚‰1è¡Œãšã¤èª­è¾¼ã¿
 				while ((line = reader.readLine()) != null) {
 					E entity = toEntity(line)
 
 					if (ObjectUtils.equals(id, entity.getId())) {
-						if (entity.isLogicalDeleted()) { // Šù‚É˜_—íœÏ‚İ‚Ìê‡
+						if (entity.isLogicalDeleted()) { // æ—¢ã«è«–ç†å‰Šé™¤æ¸ˆã¿ã®å ´åˆ
 							throw new EntityNotFoundException('id = ' + id
-									+ '‚ÌƒGƒ“ƒeƒBƒeƒB‚ÍŠù‚É˜_—íœ‚³‚ê‚Ä‚¢‚Ü‚·B')
+									+ 'ã®ã‚¨ãƒ³ãƒ†ã‚£ãƒ†ã‚£ã¯æ—¢ã«è«–ç†å‰Šé™¤ã•ã‚Œã¦ã„ã¾ã™ã€‚')
 						}
 
 						entity.logicalDelete()
@@ -269,9 +269,9 @@ class CharSeparatedFileRepository<K extends Comparable<K>, E extends EntityBase<
 				}
 
 				if (!deleted) {
-					// ƒpƒ‰ƒ[ƒ^[‚Åw’è‚³‚ê‚½ƒGƒ“ƒeƒBƒeƒB‚ª‘¶İ‚µ‚È‚©‚Á‚½ê‡
+					// ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ãƒ¼ã§æŒ‡å®šã•ã‚ŒãŸã‚¨ãƒ³ãƒ†ã‚£ãƒ†ã‚£ãŒå­˜åœ¨ã—ãªã‹ã£ãŸå ´åˆ
 					throw new EntityNotFoundException('id = ' + id
-							+ '‚ÌƒGƒ“ƒeƒBƒeƒB‚Í‘¶İ‚µ‚Ü‚¹‚ñB')
+							+ 'ã®ã‚¨ãƒ³ãƒ†ã‚£ãƒ†ã‚£ã¯å­˜åœ¨ã—ã¾ã›ã‚“ã€‚')
 				}
 			}
 		}
@@ -291,9 +291,9 @@ class CharSeparatedFileRepository<K extends Comparable<K>, E extends EntityBase<
 
 			return entity
 		} catch (InstantiationException e) {
-			throw new SystemException('ƒGƒ“ƒeƒBƒeƒB‚Ì•œŒ³‚É—áŠO‚ª”­¶‚µ‚Ü‚µ‚½B', e)
+			throw new SystemException('ã‚¨ãƒ³ãƒ†ã‚£ãƒ†ã‚£ã®å¾©å…ƒæ™‚ã«ä¾‹å¤–ãŒç™ºç”Ÿã—ã¾ã—ãŸã€‚', e)
 		} catch (IllegalAccessException e) {
-			throw new SystemException('ƒGƒ“ƒeƒBƒeƒB‚Ì•œŒ³‚É—áŠO‚ª”­¶‚µ‚Ü‚µ‚½B', e)
+			throw new SystemException('ã‚¨ãƒ³ãƒ†ã‚£ãƒ†ã‚£ã®å¾©å…ƒæ™‚ã«ä¾‹å¤–ãŒç™ºç”Ÿã—ã¾ã—ãŸã€‚', e)
 		}
 	}
 
@@ -305,7 +305,7 @@ class CharSeparatedFileRepository<K extends Comparable<K>, E extends EntityBase<
 			String token = st.nextToken()
 			
  			if (prevToken.equals(getSeparator()) && token.equals(getSeparator()) ) {
- 				result.add(''); // ‹æØ‚è‚ª˜A‘±‚·‚éê‡‚Í‹ó•¶š‚ğ‚Â‚ß‚éB
+ 				result.add(''); // åŒºåˆ‡ã‚ŠãŒé€£ç¶šã™ã‚‹å ´åˆã¯ç©ºæ–‡å­—ã‚’ã¤ã‚ã‚‹ã€‚
  			} else if (!getSeparator().equals(token)) {
  				result.add(token)
  			}
@@ -322,17 +322,17 @@ class CharSeparatedFileRepository<K extends Comparable<K>, E extends EntityBase<
 				throw new IOException()
 			}
 
-			// ƒeƒ“ƒ|ƒ‰ƒŠ[ƒtƒ@ƒCƒ‹‚ğƒ}ƒXƒ^‚É’uŠ·‚¦
+			// ãƒ†ãƒ³ãƒãƒ©ãƒªãƒ¼ãƒ•ã‚¡ã‚¤ãƒ«ã‚’ãƒã‚¹ã‚¿ã«ç½®æ›ãˆ
 			workFile.renameTo(masterFile)
 
 		} catch (IOException e) {
-			throw new SystemException('ƒ[ƒNƒtƒ@ƒCƒ‹‚Ì•ÏX‚ğƒ}ƒXƒ^[ƒtƒ@ƒCƒ‹‚É”½‰f‚Å‚«‚Ü‚¹‚ñB', e)
+			throw new SystemException('ãƒ¯ãƒ¼ã‚¯ãƒ•ã‚¡ã‚¤ãƒ«ã®å¤‰æ›´ã‚’ãƒã‚¹ã‚¿ãƒ¼ãƒ•ã‚¡ã‚¤ãƒ«ã«åæ˜ ã§ãã¾ã›ã‚“ã€‚', e)
 		}
 	}
 
 	// NOTE
-	// –{—ˆ‚Í‘Sƒtƒ@ƒCƒ‹‚Ì“à—e‚ğƒƒ‚ƒŠã‚É“Ç‚İ‚ñ‚Åˆ—‚µ‚½‚Ù‚¤‚ªŠÈ’P‚¾‚ªA
-	// ƒIƒŠƒWƒiƒ‹‚ÌÀ‘•‚ğ‹É—Íc‚·‚±‚Æ‚É‚µ‚½B
+	// æœ¬æ¥ã¯å…¨ãƒ•ã‚¡ã‚¤ãƒ«ã®å†…å®¹ã‚’ãƒ¡ãƒ¢ãƒªä¸Šã«èª­ã¿è¾¼ã‚“ã§å‡¦ç†ã—ãŸã»ã†ãŒç°¡å˜ã ãŒã€
+	// ã‚ªãƒªã‚¸ãƒŠãƒ«ã®å®Ÿè£…ã‚’æ¥µåŠ›æ®‹ã™ã“ã¨ã«ã—ãŸã€‚
 
 	private void openForWrite() throws IOException {
 		reader = new BufferedReader(new FileReader(masterFile))
@@ -361,4 +361,6 @@ class CharSeparatedFileRepository<K extends Comparable<K>, E extends EntityBase<
 		}
 	}
 
+	def test2() {
+	}
 }

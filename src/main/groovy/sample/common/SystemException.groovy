@@ -1,4 +1,4 @@
-package sample.common
+﻿package sample.common
 
 class SystemException extends RuntimeException {
 

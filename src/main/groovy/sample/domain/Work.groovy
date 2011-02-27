@@ -1,4 +1,4 @@
-package sample.domain
+ï»¿package sample.domain
 
 import java.util.ArrayList
 import java.util.Arrays
@@ -7,25 +7,25 @@ import java.util.List
 import sample.common.entity.EntityBase
 
 /**
- * ‰Ò“®ó‹µƒGƒ“ƒeƒBƒeƒB
+ * ç¨¼å‹•çŠ¶æ³ã‚¨ãƒ³ãƒ†ã‚£ãƒ†ã‚£
  */
 class Work extends EntityBase<WorkKey> {
 
-	/** lŞID */
+	/** äººæID */
 	long hrId
 	
 	long workStatusNo
 
-	/** æˆøæID */
+	/** å–å¼•å…ˆID */
 	long partnerId
 
-	/** ‰Ò“®ŠJn“ú */
+	/** ç¨¼å‹•é–‹å§‹æ—¥ */
 	String startDate
 
-	/** ‰Ò“®I—¹“ú */
+	/** ç¨¼å‹•çµ‚äº†æ—¥ */
 	String endDate
 
-	/** Œ_–ñ’P‰¿ */
+	/** å¥‘ç´„å˜ä¾¡ */
 	String contractSalary
 
 	@Override
@@ -37,7 +37,7 @@ class Work extends EntityBase<WorkKey> {
 	}
 	
 	// TODO
-	// ˆÈ‰º‚Ì•”•ª‚ÌƒR[ƒh‚Íƒƒ^î•ñ‚©‚ç‚Å©“®¶¬‚Å‚«‚é‚Í‚¸
+	// ä»¥ä¸‹ã®éƒ¨åˆ†ã®ã‚³ãƒ¼ãƒ‰ã¯ãƒ¡ã‚¿æƒ…å ±ã‹ã‚‰ã§è‡ªå‹•ç”Ÿæˆã§ãã‚‹ã¯ãš
 	
 	@Override
 	String[] toArray() {

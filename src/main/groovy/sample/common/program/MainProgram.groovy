@@ -1,4 +1,4 @@
-package sample.common.program
+﻿package sample.common.program
 
 interface MainProgram extends Runnable {
 

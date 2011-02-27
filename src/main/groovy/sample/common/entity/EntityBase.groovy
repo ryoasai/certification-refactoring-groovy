@@ -1,4 +1,4 @@
-package sample.common.entity
+ï»¿package sample.common.entity
 
 import java.text.ParseException
 import java.text.SimpleDateFormat
@@ -14,13 +14,13 @@ abstract class EntityBase<K> implements ArrayConvertable, Identifiable<K> {
 	/** ID */
 	K id
 
-	/** “o˜^“ú•t */
+	/** ç™»éŒ²æ—¥ä»˜ */
 	Date createDate
 	
-	/** XV“ú•t */
+	/** æ›´æ–°æ—¥ä»˜ */
 	Date updateDate
 	
-	/** íœ“ú•t */
+	/** å‰Šé™¤æ—¥ä»˜ */
 	Date deleteDate
 	
 	boolean isPersisted() {
@@ -39,8 +39,8 @@ abstract class EntityBase<K> implements ArrayConvertable, Identifiable<K> {
 	}
 	
 	/**
-	 * Šù‚É˜_—íœÏ‚İ‚©‚Ç‚¤‚©
-	 * @return ˜_—íœÏ‚İ‚Ìê‡‚Ítrue
+	 * æ—¢ã«è«–ç†å‰Šé™¤æ¸ˆã¿ã‹ã©ã†ã‹
+	 * @return è«–ç†å‰Šé™¤æ¸ˆã¿ã®å ´åˆã¯true
 	 */
 	boolean isLogicalDeleted() {
 		return deleteDate != null
@@ -60,12 +60,12 @@ abstract class EntityBase<K> implements ArrayConvertable, Identifiable<K> {
 		try {
 			return dateFormat.parse(dateStr)
 		} catch (ParseException e) {
-			throw new SystemException('“ú•t‚Ìƒp[ƒY‚É¸”s:' + dateStr, e)
+			throw new SystemException('æ—¥ä»˜ã®ãƒ‘ãƒ¼ã‚ºã«å¤±æ•—:' + dateStr, e)
 		}
 	}
 	
 	void logicalDelete() {
-		if (isLogicalDeleted()) throw new IllegalStateException('Šù‚É˜_—íœÏ‚İ‚Å‚·B')
+		if (isLogicalDeleted()) throw new IllegalStateException('æ—¢ã«è«–ç†å‰Šé™¤æ¸ˆã¿ã§ã™ã€‚')
 		
 		setDeleteDate(new Date())
 	}

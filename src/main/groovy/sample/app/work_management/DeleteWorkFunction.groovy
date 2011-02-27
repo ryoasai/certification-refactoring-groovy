@@ -1,4 +1,4 @@
-package sample.app.work_management
+ï»¿package sample.app.work_management
 
 
 import java.util.List
@@ -15,7 +15,7 @@ import sample.repository.HumanResourceRepository
 import sample.repository.WorkRepository
 
 /**
- * ‰Ò“­ó‹µíœ
+ * ç¨¼åƒçŠ¶æ³å‰Šé™¤
  */
 @Component
 class DeleteWorkFunction implements Function {
@@ -34,26 +34,26 @@ class DeleteWorkFunction implements Function {
 
 	void run() {
 
-		// lŞID“ü—Í
-		long hrId = console.acceptLong('lŞID‚ğ“ü—Í‚µ‚Ä‚­‚¾‚³‚¢B', {input ->
-			hrRepository.findById(input) != null // lŞID‘¶İƒ`ƒFƒbƒN
+		// äººæIDå…¥åŠ›
+		long hrId = console.acceptLong('äººæIDã‚’å…¥åŠ›ã—ã¦ãã ã•ã„ã€‚', {input ->
+			hrRepository.findById(input) != null // äººæIDå­˜åœ¨ãƒã‚§ãƒƒã‚¯
 		})
 
-		// lŞID‚ÉŠÖ˜A‚·‚é‰Ò“®ƒŠƒXƒg‚ÌŒŸõ
+		// äººæIDã«é–¢é€£ã™ã‚‹ç¨¼å‹•ãƒªã‚¹ãƒˆã®æ¤œç´¢
 		List<Work> workList = findWorkListByHRId(hrId)
 		if (workList.isEmpty()) {
 			return
 		}
 		
-		 // ‰Ò“­ó‹µ‚ğ•\¦
+		 // ç¨¼åƒçŠ¶æ³ã‚’è¡¨ç¤º
 		workListView.display(workList)
 		
-		// íœ‚·‚é‰Ò“­ó‹µID‚Ìæ“¾
-		String workId = console.acceptFromIdList(workList, 'íœ‚µ‚½‚¢‰Ò“­ó‹µ‚Ì”Ô†‚ğ“ü—Í‚µ‚Ä‚­‚¾‚³‚¢B')
+		// å‰Šé™¤ã™ã‚‹ç¨¼åƒçŠ¶æ³IDã®å–å¾—
+		String workId = console.acceptFromIdList(workList, 'å‰Šé™¤ã—ãŸã„ç¨¼åƒçŠ¶æ³ã®ç•ªå·ã‚’å…¥åŠ›ã—ã¦ãã ã•ã„ã€‚')
 
-		if (console.confirm('‚±‚Ìî•ñ‚ğíœ‚µ‚Ü‚·‚©H(Y ‚Í‚¢@N ‚¢‚¢‚¦)', 'Y', 'N')) {
+		if (console.confirm('ã“ã®æƒ…å ±ã‚’å‰Šé™¤ã—ã¾ã™ã‹ï¼Ÿ(Y ã¯ã„ã€€N ã„ã„ãˆ)', 'Y', 'N')) {
 			workRepository.delete(new WorkKey(hrId, Long.parseLong(workId)))
-			console.display('íœ‚µ‚Ü‚µ‚½B'); 
+			console.display('å‰Šé™¤ã—ã¾ã—ãŸã€‚'); 
 		}
 	}
 

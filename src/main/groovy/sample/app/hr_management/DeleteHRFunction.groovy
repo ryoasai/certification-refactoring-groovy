@@ -1,4 +1,4 @@
-package sample.app.hr_management
+ï»¿package sample.app.hr_management
 
 
 import javax.inject.Inject
@@ -11,7 +11,7 @@ import sample.domain.HumanResource
 import sample.repository.HumanResourceRepository
 
 /**
- * lŞî•ñíœ
+ * äººææƒ…å ±å‰Šé™¤
  */
 @Component
 class DeleteHRFunction implements Function {
@@ -28,7 +28,7 @@ class DeleteHRFunction implements Function {
 	private HumanResource selectedHumanResource
 
 	/**
-	 * lŞŠÇ—(íœ)ƒƒjƒ…[‚ÌÀs
+	 * äººæç®¡ç†(å‰Šé™¤)ãƒ¡ãƒ‹ãƒ¥ãƒ¼ã®å®Ÿè¡Œ
 	 */
 	@Override
 	void run() {
@@ -38,8 +38,8 @@ class DeleteHRFunction implements Function {
 	}
 
 	private void selectHumanResource() {
-		// lŞID“ü—Í
-		long hrId = console.acceptLong('lŞID‚ğ“ü—Í‚µ‚Ä‚­‚¾‚³‚¢B', {input ->
+		// äººæIDå…¥åŠ›
+		long hrId = console.acceptLong('äººæIDã‚’å…¥åŠ›ã—ã¦ãã ã•ã„ã€‚', {input ->
 			hrRepository.findById(input) != null
 		})
 		
@@ -49,9 +49,9 @@ class DeleteHRFunction implements Function {
 	}
 	
 	private void deleteHumanResource() {
-		if (console.confirm('‚±‚ÌlŞî•ñ‚ğíœ‚µ‚Ü‚·‚©H(Y ‚Í‚¢@N ‚¢‚¢‚¦)', 'Y', 'N')) {
+		if (console.confirm('ã“ã®äººææƒ…å ±ã‚’å‰Šé™¤ã—ã¾ã™ã‹ï¼Ÿ(Y ã¯ã„ã€€N ã„ã„ãˆ)', 'Y', 'N')) {
 			hrRepository.delete(selectedHumanResource.getId())
-			console.display('íœ‚µ‚Ü‚µ‚½B') 
+			console.display('å‰Šé™¤ã—ã¾ã—ãŸã€‚') 
 		}
 	}
 

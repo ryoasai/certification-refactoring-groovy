@@ -1,35 +1,35 @@
-package sample.domain
+ï»¿package sample.domain
 
 import java.util.ArrayList
 import java.util.Arrays
 import java.util.List
 
 /**
- * lŞƒGƒ“ƒeƒBƒeƒB
+ * äººæã‚¨ãƒ³ãƒ†ã‚£ãƒ†ã‚£
  */
 class HumanResource extends Party {
 
 
-	/** ’a¶“ú */
+	/** èª•ç”Ÿæ—¥ */
 	String birthDay
 
-	/** «•Ê */
+	/** æ€§åˆ¥ */
 	String genderType
 
-	/** ‹ÆíID */
+	/** æ¥­ç¨®ID */
 	long occupationId
 
-	/** ŒoŒ±”N” */
+	/** çµŒé¨“å¹´æ•° */
 	String yearOfExperience
 
-	/** ÅIŠw—ğ */
+	/** æœ€çµ‚å­¦æ­´ */
 	String schoolBackground
 
-	/** Šó–]’P‰¿ */
+	/** å¸Œæœ›å˜ä¾¡ */
 	String requestedSalary
 
 	// TODO
-	// ˆÈ‰º‚Ì•”•ª‚ÌƒR[ƒh‚Íƒƒ^î•ñ‚©‚ç‚Å©“®¶¬‚Å‚«‚é‚Í‚¸
+	// ä»¥ä¸‹ã®éƒ¨åˆ†ã®ã‚³ãƒ¼ãƒ‰ã¯ãƒ¡ã‚¿æƒ…å ±ã‹ã‚‰ã§è‡ªå‹•ç”Ÿæˆã§ãã‚‹ã¯ãš
 
 	@Override
 	String[] toArray() {

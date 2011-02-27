@@ -1,4 +1,4 @@
-package sample.common.console
+ï»¿package sample.common.console
 
 import java.io.IOException
 import java.io.InputStreamReader
@@ -31,14 +31,14 @@ class ConsoleImpl implements Console {
 	@Override
 	void display(List<String> messages) {
 		for (String line in messages) {
-			println line // ‹@”\ˆê——‚Ì•\¦
+			println line // æ©Ÿèƒ½ä¸€è¦§ã®è¡¨ç¤º
 		}
 	}
 	
 	@Override
 	void display(String... messages) {
 		for (String line in messages) {
-			println line // ‹@”\ˆê——‚Ì•\¦
+			println line // æ©Ÿèƒ½ä¸€è¦§ã®è¡¨ç¤º
 		}
 	}
 	
@@ -49,7 +49,7 @@ class ConsoleImpl implements Console {
 			if (yes.equals(input)) return true
 			if (no.equals(input)) return false
 			
-			display('\n' + yes + '‚©' + no + '‚ğ“ü—Í‚µ‚Ä‚­‚¾‚³‚¢B')
+			display('\n' + yes + 'ã‹' + no + 'ã‚’å…¥åŠ›ã—ã¦ãã ã•ã„ã€‚')
 		}
 	}
 	
@@ -63,14 +63,14 @@ class ConsoleImpl implements Console {
 	
 	@Override
 	String accept(String message, Closure validInput) {
-		while (true) { // ³‚µ‚­“ü—Í‚³‚ê‚é‚Ü‚Åƒ‹[ƒv
+		while (true) { // æ­£ã—ãå…¥åŠ›ã•ã‚Œã‚‹ã¾ã§ãƒ«ãƒ¼ãƒ—
 			String input = accept(message); 
 		
 			try {
 				if (validInput.call(input)) return input
 			} catch (Exception ex) {
-				// TODO —áŠOˆ—‚ÌêŠ‚ÌŒŸ“¢
-				// ‚à‚Æ‚à‚Æ‚ÌƒR[ƒh‚ğ“®‚«‚ğˆê’U•ÛB
+				// TODO ä¾‹å¤–å‡¦ç†ã®å ´æ‰€ã®æ¤œè¨
+				// ã‚‚ã¨ã‚‚ã¨ã®ã‚³ãƒ¼ãƒ‰ã‚’å‹•ãã‚’ä¸€æ—¦ä¿æŒã€‚
 				ex.printStackTrace()
 			}
 		}
@@ -92,14 +92,14 @@ class ConsoleImpl implements Console {
 
 	@Override
 	int acceptInt(String message, Closure validInput) {
-		while (true) { // ³‚µ‚­“ü—Í‚³‚ê‚é‚Ü‚Åƒ‹[ƒv
+		while (true) { // æ­£ã—ãå…¥åŠ›ã•ã‚Œã‚‹ã¾ã§ãƒ«ãƒ¼ãƒ—
 			int input = acceptInt(message); 
 		
 			try {
 				if (validInput.call(input)) return input
 			} catch (Exception ex) {
-				// TODO —áŠOˆ—‚ÌêŠ‚ÌŒŸ“¢
-				// ‚à‚Æ‚à‚Æ‚ÌƒR[ƒh‚ğ“®‚«‚ğˆê’U•ÛB
+				// TODO ä¾‹å¤–å‡¦ç†ã®å ´æ‰€ã®æ¤œè¨
+				// ã‚‚ã¨ã‚‚ã¨ã®ã‚³ãƒ¼ãƒ‰ã‚’å‹•ãã‚’ä¸€æ—¦ä¿æŒã€‚
 				ex.printStackTrace()
 			}
 		}
@@ -121,14 +121,14 @@ class ConsoleImpl implements Console {
 	
 	@Override
 	long acceptLong(String message, Closure validInput) {
-		while (true) { // ³‚µ‚­“ü—Í‚³‚ê‚é‚Ü‚Åƒ‹[ƒv
+		while (true) { // æ­£ã—ãå…¥åŠ›ã•ã‚Œã‚‹ã¾ã§ãƒ«ãƒ¼ãƒ—
 			long input = acceptLong(message); 
 		
 			try {
 				if (validInput.call(input)) return input
 			} catch (Exception ex) {
-				// TODO —áŠOˆ—‚ÌêŠ‚ÌŒŸ“¢
-				// ‚à‚Æ‚à‚Æ‚ÌƒR[ƒh‚ğ“®‚«‚ğˆê’U•ÛB
+				// TODO ä¾‹å¤–å‡¦ç†ã®å ´æ‰€ã®æ¤œè¨
+				// ã‚‚ã¨ã‚‚ã¨ã®ã‚³ãƒ¼ãƒ‰ã‚’å‹•ãã‚’ä¸€æ—¦ä¿æŒã€‚
 				ex.printStackTrace()
 			}
 		}
@@ -187,12 +187,12 @@ class ConsoleImpl implements Console {
 			buff.append('\n')
 		}
 		
-		buff.append(' ['); // IDƒŠƒXƒg‚Ì•\¦
+		buff.append(' ['); // IDãƒªã‚¹ãƒˆã®è¡¨ç¤º
 		for (NameId<?> partner : nameIdList) {
 			buff.append(partner.getId())
 			buff.append(',')
 		}
-		buff.deleteCharAt(buff.length() - 1); // ––”ö‚Ì','‚ğíœ
+		buff.deleteCharAt(buff.length() - 1); // æœ«å°¾ã®','ã‚’å‰Šé™¤
 		buff.append(']')
 		
 		buff.toString()
@@ -222,12 +222,12 @@ class ConsoleImpl implements Console {
 			buff.append('\n')
 		}
 		
-		buff.append(' ['); // IDƒŠƒXƒg‚Ì•\¦
+		buff.append(' ['); // IDãƒªã‚¹ãƒˆã®è¡¨ç¤º
 		for (Identifiable<?> partner : idList) {
 			buff.append(partner.getId())
 			buff.append(',')
 		}
-		buff.deleteCharAt(buff.length() - 1); // ––”ö‚Ì','‚ğíœ
+		buff.deleteCharAt(buff.length() - 1); // æœ«å°¾ã®','ã‚’å‰Šé™¤
 		buff.append(']')
 		
 		buff.toString()
@@ -247,9 +247,9 @@ class ConsoleImpl implements Console {
 	
 	
 	/**
-	 * ƒL[ƒ{[ƒh‚©‚ç‚Ì“ü—Íóæ‚è
+	 * ã‚­ãƒ¼ãƒœãƒ¼ãƒ‰ã‹ã‚‰ã®å…¥åŠ›å—å–ã‚Š
 	 * 
-	 * @return “ü—Í•¶š—ñ
+	 * @return å…¥åŠ›æ–‡å­—åˆ—
 	 */
 	private String doAcceptChars() {
 		int c
@@ -279,7 +279,7 @@ class ConsoleImpl implements Console {
 			isr.close()
 			
 		} catch (IOException e) {
-			System.err.println("“ü—Íóæ‚èƒGƒ‰[: + $e.message")
+			System.err.println("å…¥åŠ›å—å–ã‚Šã‚¨ãƒ©ãƒ¼: + $e.message")
 		}
 		
 		return null
