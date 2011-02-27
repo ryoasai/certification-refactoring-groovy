@@ -177,26 +177,22 @@ class CharSeparatedFileRepository<K extends Comparable<K>, E extends EntityBase<
 
 		processUpdate {
 			
-			@Override
-			void handle() throws IOException {
-				String line
+			String line
 
-				List<K> idList = new ArrayList<K>()
-				// マスタから1行ずつ読込み
-				while ((line = reader.readLine()) != null) {
-					E entity = toEntity(line)
-					idList.add(entity.getId())
+			List<K> idList = new ArrayList<K>()
+			// マスタから1行ずつ読込み
+			while ((line = reader.readLine()) != null) {
+				E entity = toEntity(line)
+				idList.add(entity.getId())
 
-					writeEntity(entity)
-				}
-
-				K maxId = Collections.max(idList)
-				data.setId(nextId(maxId))
-
-				data.preCreate(); // 更新、作成日付の発行
-				writeEntity(data)
+				writeEntity(entity)
 			}
 
+			K maxId = Collections.max(idList)
+			data.setId(nextId(maxId))
+
+			data.preCreate(); // 更新、作成日付の発行
+			writeEntity(data)
 		}
 	}
 
@@ -220,25 +216,22 @@ class CharSeparatedFileRepository<K extends Comparable<K>, E extends EntityBase<
 			throw new IllegalArgumentException('パラメーターが永続化されていません。')
 
 		processUpdate {
-			@Override
-			void handle() throws IOException {
-				String line
+			String line
 
-				// マスタから1行ずつ読込み
-				while ((line = reader.readLine()) != null) {
-					E entity = toEntity(line)
-					if (data.getId().equals(entity.getId())) {
-						if (entity.isLogicalDeleted()) { // 既に論理削除済みの場合
-							throw new EntityNotFoundException('id = '
-									+ entity.getId() + 'のエンティティは既に論理削除されています。')
-						}
-
-						data.preUpdate()
-						entity = data
+			// マスタから1行ずつ読込み
+			while ((line = reader.readLine()) != null) {
+				E entity = toEntity(line)
+				if (data.getId().equals(entity.getId())) {
+					if (entity.isLogicalDeleted()) { // 既に論理削除済みの場合
+						throw new EntityNotFoundException('id = '
+								+ entity.getId() + 'のエンティティは既に論理削除されています。')
 					}
 
-					writeEntity(entity)
+					data.preUpdate()
+					entity = data
 				}
+
+				writeEntity(entity)
 			}
 		}
 	}
@@ -246,33 +239,30 @@ class CharSeparatedFileRepository<K extends Comparable<K>, E extends EntityBase<
 	@Override
 	void delete(final K id) {
 		processUpdate {
-			@Override
-			void handle() throws IOException {
-				String line
-				boolean deleted = false
+			String line
+			boolean deleted = false
 
-				// マスタから1行ずつ読込み
-				while ((line = reader.readLine()) != null) {
-					E entity = toEntity(line)
+			// マスタから1行ずつ読込み
+			while ((line = reader.readLine()) != null) {
+				E entity = toEntity(line)
 
-					if (ObjectUtils.equals(id, entity.getId())) {
-						if (entity.isLogicalDeleted()) { // 既に論理削除済みの場合
-							throw new EntityNotFoundException('id = ' + id
-									+ 'のエンティティは既に論理削除されています。')
-						}
-
-						entity.logicalDelete()
-						deleted = true
+				if (ObjectUtils.equals(id, entity.getId())) {
+					if (entity.isLogicalDeleted()) { // 既に論理削除済みの場合
+						throw new EntityNotFoundException('id = ' + id
+								+ 'のエンティティは既に論理削除されています。')
 					}
 
-					writeEntity(entity)
+					entity.logicalDelete()
+					deleted = true
 				}
 
-				if (!deleted) {
-					// パラメーターで指定されたエンティティが存在しなかった場合
-					throw new EntityNotFoundException('id = ' + id
-							+ 'のエンティティは存在しません。')
-				}
+				writeEntity(entity)
+			}
+
+			if (!deleted) {
+				// パラメーターで指定されたエンティティが存在しなかった場合
+				throw new EntityNotFoundException('id = ' + id
+						+ 'のエンティティは存在しません。')
 			}
 		}
 	}
