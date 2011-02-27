@@ -87,16 +87,16 @@ abstract class EntityBase<K> implements ArrayConvertable, Identifiable<K> {
 	
 	protected List<String> createDateColumns() {
 		if (isLogicalDeleted()) {
-			return Arrays.asList(
+			return [
 				formatDate(getCreateDate()),
 				formatDate(getUpdateDate()),
 				formatDate(getDeleteDate())
-			)
+			]
 		} else {
-			return Arrays.asList(
+			return [
 				formatDate(getCreateDate()),
 				formatDate(getUpdateDate())
-			)
+			]
 		}
 	}
 }
