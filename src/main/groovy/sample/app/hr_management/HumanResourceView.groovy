@@ -47,7 +47,7 @@ class HumanResourceView implements View<HumanResource> {
 		// 人材情報の表示
 		// TODO かなり醜いコード
 		for (i in 0..< FIELDS.size()) {
-			StringBuilder sb = new StringBuilder("$FIELDS[i]  : ")
+			StringBuilder sb = new StringBuilder("${FIELDS[i]}  : ")
 			
 			if (i == 8) { // 性別の表示
 				if (hrArray[i].equals('M')) {

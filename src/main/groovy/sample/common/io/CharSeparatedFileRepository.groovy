@@ -145,7 +145,7 @@ class CharSeparatedFileRepository<K extends Comparable<K>, E extends EntityBase<
 		}
 	}
 
-	private void processUpdate(Closure fileUpdator) {
+	void processUpdate(Closure fileUpdator) {
 		try {
 			workFile.withWriter(encoding, { writer ->
 				fileUpdator.call(writer)
@@ -158,7 +158,7 @@ class CharSeparatedFileRepository<K extends Comparable<K>, E extends EntityBase<
 		commit()
 	}
 
-	private void writeEntity(E data, Writer writer) throws IOException {
+	void writeEntity(E data, Writer writer) throws IOException {
 		String outputLine = fromEntity(data)
 		writer.write(outputLine)
 		writer.newLine()
@@ -187,7 +187,7 @@ class CharSeparatedFileRepository<K extends Comparable<K>, E extends EntityBase<
 		}
 	}
 
-	private K nextId(K maxId){
+	K nextId(K maxId){
 		if (maxId instanceof Long) {
 			Object nextId = (Long)maxId + 1
 			return (K) nextId
