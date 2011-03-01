@@ -2,12 +2,7 @@ package sample.common.entity
 
 import java.text.ParseException
 import java.text.SimpleDateFormat
-import java.util.Arrays
-import java.util.Date
-import java.util.List
-
 import sample.common.SystemException
-
 
 abstract class EntityBase<K> implements ArrayConvertable, Identifiable<K> {
 

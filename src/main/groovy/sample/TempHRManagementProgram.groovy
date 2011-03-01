@@ -1,12 +1,7 @@
 package sample
 
-import java.util.Arrays
-import java.util.List
-
-import org.springframework.context.ApplicationContext
 import org.springframework.context.support.ClassPathXmlApplicationContext
 import org.springframework.stereotype.Component
-
 import sample.common.program.AbstractMainProgram
 import sample.common.program.MainProgram
 
@@ -46,10 +41,9 @@ class TempHRManagementProgram extends AbstractMainProgram {
 	 * @param args
 	 */
 	static void main(String[] args) {
+		def context = new ClassPathXmlApplicationContext('/META-INF/spring/app-context.xml')
 		
-		ApplicationContext context = new ClassPathXmlApplicationContext('/META-INF/spring/app-context.xml')
-		
-		MainProgram mainProgram = context.getBean('mainProgram', MainProgram.class)
+		def mainProgram = context.getBean('mainProgram', MainProgram)
 		mainProgram.run()
 	}
 

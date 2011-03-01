@@ -1,13 +1,7 @@
 package sample.app.hr_search
 
-
-import java.util.Arrays
-import java.util.List
-
 import javax.inject.Inject
-
 import org.springframework.stereotype.Component
-
 import sample.common.console.Console
 import sample.common.program.AbstractDispatcher
 import sample.common.program.Function
@@ -15,7 +9,6 @@ import sample.domain.HumanResource
 import sample.domain.Occupation
 import sample.repository.HumanResourceRepository
 import sample.repository.OccupationRepository
-
 
 /**
  * 人材検索処理

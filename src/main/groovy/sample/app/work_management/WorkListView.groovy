@@ -1,14 +1,8 @@
 package sample.app.work_management
 
-
-import java.util.List
-import java.util.Map
-
 import javax.annotation.PostConstruct
 import javax.inject.Inject
-
 import org.springframework.stereotype.Component
-
 import sample.common.console.Console
 import sample.common.console.View
 import sample.domain.Partner

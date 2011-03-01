@@ -1,14 +1,9 @@
 package sample.app.hr_search
 
-import java.util.Arrays
-import java.util.List
-
 import javax.annotation.PostConstruct
 import javax.inject.Inject
-
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Component
-
 import sample.app.hr_management.HumanResourceView
 import sample.app.work_management.WorkListView
 import sample.common.console.Console

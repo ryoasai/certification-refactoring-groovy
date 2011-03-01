@@ -1,10 +1,6 @@
 package sample.common.io
 
-import java.util.List
-import java.util.Map
-
 import sample.common.entity.EntityBase
-
 
 /**
  * エンティティを永続化するためのレポジトリークラスが実装すべきインターフェースです。

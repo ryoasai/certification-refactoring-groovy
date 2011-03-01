@@ -1,12 +1,8 @@
 package sample.repository.impl
 
-import java.io.File
-
 import javax.inject.Inject
-
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Repository
-
 import sample.common.io.CharSeparatedFileRepository
 import sample.domain.Occupation
 import sample.repository.OccupationRepository

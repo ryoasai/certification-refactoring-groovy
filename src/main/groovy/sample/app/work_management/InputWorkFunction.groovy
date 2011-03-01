@@ -1,10 +1,7 @@
 package sample.app.work_management
 
-
 import javax.inject.Inject
-
 import org.springframework.stereotype.Component
-
 import sample.common.console.Console
 import sample.common.program.Function
 import sample.domain.Work

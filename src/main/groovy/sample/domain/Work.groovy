@@ -1,11 +1,6 @@
 package sample.domain
 
-import java.util.ArrayList
-import java.util.Arrays
-import java.util.List
-
 import sample.common.entity.EntityBase
-
 
 /**
  * 稼動状況エンティティ

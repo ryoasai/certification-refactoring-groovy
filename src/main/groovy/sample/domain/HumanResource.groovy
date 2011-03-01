@@ -1,9 +1,5 @@
 package sample.domain
 
-import java.util.ArrayList
-import java.util.Arrays
-import java.util.List
-
 /**
  * 人材エンティティ
  */
@@ -34,7 +30,7 @@ class HumanResource extends Party {
 	@Override
 	String[] toArray() {
 		def dataList = [
-			String.valueOf(id),
+			id,
 			name,
 			postalCode,
 			address,
@@ -56,7 +52,7 @@ class HumanResource extends Party {
 	void fromArray(String[] data) {
 		int i = 0
 
-		id = data[i++].toLong()
+		id = data[i++]?.toLong()
 		name = data[i++]
 		postalCode = data[i++]
 		address = data[i++]
@@ -65,7 +61,7 @@ class HumanResource extends Party {
 		email = data[i++]
 		birthDay = data[i++]
 		genderType = data[i++]
-		occupationId = data[i++].toLong()
+		occupationId = data[i++]?.toLong()
 		yearOfExperience = data[i++]
 		schoolBackground = data[i++]
 		requestedSalary = data[i++]

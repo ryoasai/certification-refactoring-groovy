@@ -3,7 +3,6 @@ package sample.domain
 import sample.common.entity.EntityBase
 import sample.common.entity.NameId
 
-
 abstract class Party extends EntityBase<Long> implements NameId<Long> {
 
 	/** 氏名 */

@@ -1,28 +1,13 @@
 package sample.common.io
 
 import java.beans.PropertyDescriptor
-import java.io.BufferedReader
-import java.io.BufferedWriter
-import java.io.File
-import java.io.FileReader
-import java.io.FileWriter
-import java.io.IOException
 import java.lang.reflect.Method
 import java.lang.reflect.ParameterizedType
-import java.util.ArrayList
-import java.util.Collections
-import java.util.HashMap
-import java.util.List
-import java.util.Map
-import java.util.StringTokenizer
-
 import javax.annotation.PostConstruct
-
 import org.apache.commons.lang.ObjectUtils
 import org.apache.commons.lang.StringUtils
 import org.springframework.beans.BeanUtils
 import org.springframework.util.ReflectionUtils
-
 import sample.common.SystemException
 import sample.common.entity.EntityBase
 import sample.common.entity.Sequence
@@ -127,7 +112,8 @@ class CharSeparatedFileRepository<K extends Comparable<K>, E extends EntityBase<
 				if (prop.getName().equals('class') || 
 					prop.getName().equals('metaClass') || 
 					prop.getName().equals('persisted')) continue
-				
+
+                // TODO Groovyのメタクラスを使って書き換える。
 				Object exampleValue = ReflectionUtils.invokeMethod(readMethod, example)
 				if (exampleValue == null) continue
 				if (exampleValue instanceof Long && (Long)(exampleValue) == 0) continue; // 基本型のlongの0は無視（いまいち）
@@ -183,7 +169,7 @@ class CharSeparatedFileRepository<K extends Comparable<K>, E extends EntityBase<
 			data.setId(nextId(maxId))
 
 			data.preCreate(); // 更新、作成日付の発行
-			writeEntity(data)
+			writeEntity(data, writer)
 		}
 	}
 

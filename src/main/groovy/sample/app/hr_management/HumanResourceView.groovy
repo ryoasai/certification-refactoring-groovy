@@ -1,13 +1,8 @@
 package sample.app.hr_management
 
-
-import java.util.Map
-
 import javax.annotation.PostConstruct
 import javax.inject.Inject
-
 import org.springframework.stereotype.Component
-
 import sample.common.console.Console
 import sample.common.console.View
 import sample.domain.HumanResource
@@ -39,8 +34,6 @@ class HumanResourceView implements View<HumanResource> {
 
 	void display(HumanResource hr) {
 		
-		String occupationName = getOccupationName(hr.getOccupationId())
-		
 		console.display '' // 改行
 		String[] hrArray = hr.toArray()
 		
@@ -57,7 +50,7 @@ class HumanResourceView implements View<HumanResource> {
 				}
 			
 			} else if (i == 9) {
-				sb.append(occupationName) // 業種名の表示
+				sb.append(getOccupationName(hr.occupationId)) // 業種名の表示
 			} else {
 				sb.append(hrArray[i])
 			}

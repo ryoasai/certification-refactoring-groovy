@@ -2,7 +2,6 @@ package sample.domain
 
 import sample.common.entity.Sequence
 
-
 class WorkKey implements Sequence<WorkKey>, Comparable<WorkKey> {
 
 	private final long hrId

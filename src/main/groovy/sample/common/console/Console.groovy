@@ -1,8 +1,5 @@
 package sample.common.console
 
-import java.util.Date
-import java.util.List
-
 import sample.common.entity.Identifiable
 import sample.common.entity.NameId
 

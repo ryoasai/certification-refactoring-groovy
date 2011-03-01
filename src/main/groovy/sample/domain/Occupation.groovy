@@ -1,9 +1,5 @@
 package sample.domain
 
-import java.util.ArrayList
-import java.util.Arrays
-import java.util.List
-
 import sample.common.entity.EntityBase
 import sample.common.entity.NameId
 

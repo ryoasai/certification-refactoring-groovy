@@ -1,12 +1,7 @@
 package sample.common.program
 
-import java.util.HashMap
-import java.util.Map
-
 import javax.annotation.Resource
-
 import org.springframework.beans.factory.annotation.Autowired
-
 import sample.common.console.Console
 
 /**
