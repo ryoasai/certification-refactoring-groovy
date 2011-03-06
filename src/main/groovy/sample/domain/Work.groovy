@@ -46,7 +46,7 @@ class Work extends EntityBase<WorkKey> {
 			endDate,
 			contractSalary]
 		
-		dataList += createDateColumns()
+		dataList + createDateColumns()
 	}
 
 	@Override

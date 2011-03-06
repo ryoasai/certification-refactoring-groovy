@@ -16,7 +16,7 @@ public class SampleEntity extends EntityBase<Long> {
 			age
 		]
 
-		dataList += createDateColumns()
+		dataList + createDateColumns()
 	}
 
 

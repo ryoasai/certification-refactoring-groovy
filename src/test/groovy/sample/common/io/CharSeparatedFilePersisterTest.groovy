@@ -16,7 +16,7 @@ public class CharSeparatedFilePersisterTest {
 	private static final String SP = SystemUtils.FILE_SEPARATOR
 	private static final String DATA_DIR = SystemUtils.USER_DIR + SP + 'out' + SP + 'test' + SP + 'certification-refactoring-groovy'
 
-	CharSeparatedFileRepository<Long, SampleEntity> target = new CharSeparatedFileRepository<Long, SampleEntity>()
+	def target = new CharSeparatedFileRepository<Long, SampleEntity>()
 
 	File masterFile
 	File workFile
@@ -31,10 +31,9 @@ public class CharSeparatedFilePersisterTest {
 
 		FileUtils.copyFile(originalFile, masterFile)
 
-		
-		target.setMasterFile(masterFile)
-		target.setWorkFile(workFile)
-		target.setEntityClass(SampleEntity.class)
+		target.masterFile = masterFile
+		target.workFile = workFile
+		target.entityClass = SampleEntity
 	}
 
 	@After
@@ -49,26 +48,26 @@ public class CharSeparatedFilePersisterTest {
 
 	@Test
 	public void findAll() {
-		List<SampleEntity> sampleList = target.findAll()
+		def sampleList = target.findAll()
 		assertEquals(2, sampleList.size())
 		
-		assertEquals(1L, (long)sampleList.get(0).getId())
-		assertEquals('20', sampleList.get(0).getAge())
-		assertEquals('Name1', sampleList.get(0).getName())
+		assertEquals(1L, sampleList[0].id)
+		assertEquals('20', sampleList[0].age)
+		assertEquals('Name1', sampleList[0].name)
 
-		assertEquals(3L, (long)sampleList.get(1).getId())
-		assertEquals('40', sampleList.get(1).getAge())
-		assertEquals('Name3', sampleList.get(1).getName())
+		assertEquals(3L, sampleList[1].id)
+		assertEquals('40', sampleList[1].age)
+		assertEquals('Name3', sampleList[1].name)
 	}
 
 
 	@Test
 	public void findById() {
-		SampleEntity sample = target.findById(1L)
+		def sample = target.findById(1L)
 		
-		assertEquals(1L, (long)sample.getId())
-		assertEquals('20', sample.getAge())
-		assertEquals('Name1', sample.getName())
+		assertEquals(1L, sample.id)
+		assertEquals('20', sample.age)
+		assertEquals('Name1', sample.name)
 	}
 	
 	@Test
@@ -92,15 +91,15 @@ public class CharSeparatedFilePersisterTest {
 	@Test
 	public void findByExample() {
 		SampleEntity example = new SampleEntity()
-		example.setAge('20')
+		example.age = '20'
 		
-		List<SampleEntity> sampleList = target.findByExample(example)
+		def sampleList = target.findByExample(example)
 
 		assertEquals(1, sampleList.size())
 
-		assertEquals(1L, (long)sampleList.get(0).getId())
-		assertEquals('20', sampleList.get(0).getAge())
-		assertEquals('Name1', sampleList.get(0).getName())
+		assertEquals(1L, sampleList[0].id)
+		assertEquals('20', sampleList[0].age)
+		assertEquals('Name1', sampleList[0].name)
 	}
 
 	//====================================================
@@ -109,22 +108,22 @@ public class CharSeparatedFilePersisterTest {
 	
 	@Test
 	public void create_Normal() {
-		SampleEntity example = new SampleEntity()
-		example.setAge('50')
-		example.setName('test')
+		def example = new SampleEntity()
+		example.age = '50'
+		example.name = 'test'
 		
 		target.create(example)
 		
-		List<SampleEntity> entityList = target.findAll()
+		def entityList = target.findAll()
 		assertEquals(3, entityList.size())
 		
-		SampleEntity addedEntity = entityList.get(entityList.size() - 1)
-		assertEquals(4L, (long)addedEntity.getId())
-		assertEquals('50', addedEntity.getAge())
-		assertEquals('test', addedEntity.getName())
+		SampleEntity addedEntity = entityList[entityList.size() - 1]
+		assertEquals(4L, addedEntity.id)
+		assertEquals('50', addedEntity.age)
+		assertEquals('test', addedEntity.name)
 		
-		assertNotNull(addedEntity.getCreateDate())
-		assertNotNull(addedEntity.getUpdateDate())
+		assertNotNull(addedEntity.createDate)
+		assertNotNull(addedEntity.updateDate)
 	}
 	
 	//====================================================
@@ -133,30 +132,30 @@ public class CharSeparatedFilePersisterTest {
 	
 	@Test
 	public void update_Normal() {
-		SampleEntity sample = new SampleEntity()
-		sample.setId(3L)
-		sample.setAge('10')
-		sample.setName('test')
-		sample.setCreateDate(new Date())
+		def sample = new SampleEntity()
+		sample.id = 3L
+		sample.age = '10'
+		sample.name = 'test'
+		sample.createDate = new Date()
 		
 		target.update(sample)
 		
-		SampleEntity updatedEntity = target.findById(3L)
+		def updatedEntity = target.findById(3L)
 		
-		assertEquals(3L, (long)updatedEntity.getId())
-		assertEquals('10', updatedEntity.getAge())
-		assertEquals('test', updatedEntity.getName())
-		assertNotNull(updatedEntity.getCreateDate())
-		assertNotNull(updatedEntity.getUpdateDate())
+		assertEquals(3L, updatedEntity.id)
+		assertEquals('10', updatedEntity.age)
+		assertEquals('test', updatedEntity.name)
+		assertNotNull(updatedEntity.createDate)
+		assertNotNull(updatedEntity.updateDate)
 	}
 
 	@Test
 	public void update_AlreadyLogicalDeleted() {
-		SampleEntity sample = new SampleEntity()
-		sample.setId(2L)
-		sample.setAge('10')
-		sample.setName('test')
-		sample.setCreateDate(new Date())
+		def sample = new SampleEntity()
+		sample.id = 2L
+		sample.age = '10'
+		sample.name = 'test'
+		sample.createDate = new Date()
 		
 		try {
 			target.update(sample)

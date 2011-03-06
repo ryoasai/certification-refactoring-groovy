@@ -44,7 +44,7 @@ class HumanResource extends Party {
 			schoolBackground,
 			requestedSalary]
 		
-		dataList += createDateColumns()
+		dataList + createDateColumns()
 	}
 
 	@Override
