@@ -1,2 +1,10 @@
 /build
 /.gradle
+
+/.idea
+/.settings
+/certification-refactoring-groovy.iml
+/certification-refactoring-groovy.ipr
+/certification-refactoring-groovy.iws
+/.classpath
+/.project
