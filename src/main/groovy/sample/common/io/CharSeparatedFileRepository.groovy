@@ -72,7 +72,7 @@ class CharSeparatedFileRepository<K extends Comparable<K>, E extends EntityBase<
 		}
 
 		if (result.isEmpty()) {
-			throw new EntityNotFoundException("id = $id のエンティティは存在しません。")
+			throw new EntityNotFoundException("id = ${id}のエンティティは存在しません。")
 		}
 
 		// TODO 一意性チェックはしていない
@@ -199,7 +199,7 @@ class CharSeparatedFileRepository<K extends Comparable<K>, E extends EntityBase<
 				E entity = toEntity(line)
 				if (data.getId().equals(entity.getId())) {
 					if (entity.isLogicalDeleted()) { // 既に論理削除済みの場合
-						throw new EntityNotFoundException("id = ${entity.id} のエンティティは既に論理削除されています。")
+						throw new EntityNotFoundException("id = ${entity.id}のエンティティは既に論理削除されています。")
 					}
 
 					data.preUpdate()
@@ -222,7 +222,7 @@ class CharSeparatedFileRepository<K extends Comparable<K>, E extends EntityBase<
 				
 				if (ObjectUtils.equals(id, entity.getId())) {
 					if (entity.isLogicalDeleted()) { // 既に論理削除済みの場合
-						throw new EntityNotFoundException("id = $id のエンティティは既に論理削除されています。")
+						throw new EntityNotFoundException("id = ${id}のエンティティは既に論理削除されています。")
 					}
 
 					entity.logicalDelete()
@@ -234,7 +234,7 @@ class CharSeparatedFileRepository<K extends Comparable<K>, E extends EntityBase<
 			
 			if (!deleted) {
 				// パラメーターで指定されたエンティティが存在しなかった場合
-				throw new EntityNotFoundException("id = $id のエンティティは存在しません。")
+				throw new EntityNotFoundException("id = ${id}のエンティティは存在しません。")
 			}
 		}
 	}
