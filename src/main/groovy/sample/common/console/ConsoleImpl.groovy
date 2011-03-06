@@ -154,7 +154,7 @@ class ConsoleImpl implements Console {
 
 	@Override
 	String acceptFromNameIdList(List<? extends NameId<?>> selectList, String message) {
-		String result = null
+        String result = null
 		while (true) {
 			println message
 			print nameIdListToString(selectList) + promptString
@@ -248,7 +248,6 @@ class ConsoleImpl implements Console {
 	 * @return 入力文字列
 	 */
 	private String doAcceptChars() {
-		BufferedReader br = new BufferedReader(new InputStreamReader(System.in))
-		br.readLine()
+		new BufferedReader(new InputStreamReader(System.in)).readLine()
 	}
 }
