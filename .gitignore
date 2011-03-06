@@ -8,3 +8,5 @@
 /certification-refactoring-groovy.iws
 /.classpath
 /.project
+/.settings
+/.gradle
