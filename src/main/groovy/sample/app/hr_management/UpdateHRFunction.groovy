@@ -67,21 +67,26 @@ class UpdateHRFunction implements Function {
 		console.acceptInt(sb.toString())
 	}
 
-	private void displayMenuItems(StringBuilder buff) {
-		for (i in 1..< HumanResourceView.FIELDS.size()) {
-			buff.append(i + '.' + HumanResourceView.FIELDS[i])
+	private void displayMenuItems(StringBuilder buf) {
+        HumanResourceView.FIELDS_MAP.eachWithIndex {key, value, i ->
+            if (i == 0) return
+
+            buf << i
+            buf << '.'
+            buf << value
+
 			// TODO かなり醜いロジックだが、現状のロジックを保存しておく。
 			// 本来はタブ位置を汎用的に自動調整するロジックを書くべき
 			
 			if (i == 1 || i == 8 || i == 9)
-				buff.append('\t')
+				buf << '\t'
 			if (i == 3 || i == 5 || i == 7 || i == 10 || i == 12)
-				buff.append('\n')
+				buf << '\n'
 			else if (i != 6)
-				buff.append('\t')
+				buf << '\t'
 		}
 		
-		buff.append('\n [1-12]>')
+		buf.append('\n[1-12]>')
 	}
 
 	/**

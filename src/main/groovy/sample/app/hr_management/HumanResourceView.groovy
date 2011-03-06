@@ -15,10 +15,30 @@ import sample.repository.OccupationRepository
 @Component
 class HumanResourceView implements View<HumanResource> {
 
-	static final def FIELDS = [
-		'人材ID', '氏名', '郵便番号', '住所', '電話番号', 'FAX番号', 'e-mailアドレス',
-		'生年月日', '性別', '業種', '経験年数', '最終学歴', '希望単価' ]
-	
+    static final def FIELDS_MAP = [
+        id:'人材ID',
+        name:'氏名',
+        postalCode:'郵便番号',
+        address:'住所',
+        telephoneNo:'電話番号',
+        faxNo:'FAX番号',
+        email:'e-mailアドレス',
+        birthDay:'生年月日',
+        genderType:'性別',
+        occupationId:'業種',
+        yearOfExperience:'経験年数',
+        schoolBackground:'最終学歴',
+        requestedSalary:'希望単価' ]
+
+    static final def LINE_BREAK_AFTER = [
+            '郵便番号',
+            '住所',
+            'FAX番号',
+            'e-mailアドレス',
+            '性別',
+            '経験年数',
+    ] as Set
+
 	@Inject
 	OccupationRepository occupationRepository
 
@@ -35,36 +55,34 @@ class HumanResourceView implements View<HumanResource> {
 	void display(HumanResource hr) {
 		
 		console.display '' // 改行
-		String[] hrArray = hr.toArray()
-		
+
 		// 人材情報の表示
-		// TODO かなり醜いコード
-		for (i in 0..< FIELDS.size()) {
-			StringBuilder sb = new StringBuilder("${FIELDS[i]}  : ")
+		FIELDS_MAP.each { key, value ->
+			StringBuilder sb = new StringBuilder("${value}  : ")
 			
-			if (i == 8) { // 性別の表示
-				if (hrArray[i].equals('M')) {
-					sb.append('男')
-				} else if (hrArray[i].equals('F')) {
-					sb.append('女')
+			if (value == '性別') {
+				if (hr.genderType == 'M') {
+					sb << '男'
+				} else if (hr.genderType == 'F') {
+					sb << '女'
 				}
 			
-			} else if (i == 9) {
-				sb.append(getOccupationName(hr.occupationId)) // 業種名の表示
+			} else if (value == '業種') {
+				sb << getOccupationName(hr.occupationId)
 			} else {
-				sb.append(hrArray[i])
+				sb << hr.properties[key]
 			}
 			
-			if (i == 10) {
-				sb.append('年') // 経験年数の表示
-			} else if (i == 12) {
-				sb.append('円') // 希望単価の表示
+			if (value == '経験年数') {
+				sb << '年'
+			} else if (value == '希望単価') {
+				sb << '円'
 			}
-			
-			if (i == 2 || i == 3 || i == 5 || i == 6 || i == 8 || i == 10) {
-				sb.append('\n')
+
+			if (LINE_BREAK_AFTER.contains(value)) {
+				sb << '\n'
 			} else {
-				sb.append('\t ')
+				sb << '\t'
 			}
 			
 			console.display sb.toString()

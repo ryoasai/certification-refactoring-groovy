@@ -46,18 +46,18 @@ class InputHRFunction implements Function {
 	 * @return 入力情報
 	 */
 	String[] inputData() {
-		String[] data = new String[HumanResourceView.FIELDS.size()]
-		
-		for (i in 1 ..< HumanResourceView.FIELDS.size()) {
-			if (HumanResourceView.FIELDS[i].equals('性別')) {
-				data[i] = console.accept("${HumanResourceView.FIELDS[i]}を入力してください。", {input ->
+		def data = []
+
+		HumanResourceView.FIELDS_MAP.each { key, value ->
+			if (value == '性別') {
+				data << console.accept("${value}を入力してください。", {input ->
 					'M'.equals(input) || 'F'.equals(input)
 				})
 			
-			} else if (HumanResourceView.FIELDS[i].equals('業種')) {
-				data[i] = console.acceptFromIdList(occupationRespository.findAll(), "${HumanResourceView.FIELDS[i]}を入力してください。")
+			} else if (value == '業種') {
+				data << console.acceptFromIdList(occupationRespository.findAll(), "${value}を入力してください。")
 			} else {
-				data[i] = console.accept("${HumanResourceView.FIELDS[i]}を入力してください。")
+				data << console.accept("${value}を入力してください。")
 			}
 		}
 		
