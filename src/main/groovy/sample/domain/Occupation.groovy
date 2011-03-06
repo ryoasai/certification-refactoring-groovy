@@ -11,12 +11,8 @@ class Occupation extends EntityBase<Long> implements NameId<Long> {
 
 	@Override
 	String[] toArray() {
-			
-		def dataList = [
-			String.valueOf(getId()), getName()]
-		
-		dataList.addAll(createDateColumns())
-		dataList.toArray()
+		def dataList = [ id, name ]
+		dataList += createDateColumns()
 	}
 
 

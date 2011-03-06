@@ -38,8 +38,7 @@ class Partner extends Party {
 			cutoffDay,
 			paymentDay]
 		
-		dataList.addAll(createDateColumns())
-		dataList.toArray()
+		dataList += createDateColumns()
 	}
 
 

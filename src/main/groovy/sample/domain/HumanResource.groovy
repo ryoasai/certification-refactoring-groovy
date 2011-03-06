@@ -44,8 +44,7 @@ class HumanResource extends Party {
 			schoolBackground,
 			requestedSalary]
 		
-		dataList.addAll(createDateColumns())
-		dataList.toArray()
+		dataList += createDateColumns()
 	}
 
 	@Override

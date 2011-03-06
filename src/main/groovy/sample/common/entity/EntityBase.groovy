@@ -42,6 +42,8 @@ abstract class EntityBase<K> implements ArrayConvertable, Identifiable<K> {
 	}
 
 	protected String formatDate(Date date) {
+        if (date == null) return null
+
 		SimpleDateFormat dateFormat = createDateFormat()
 		dateFormat.format(date)
 	}

@@ -28,8 +28,8 @@ class Work extends EntityBase<WorkKey> {
 	void setId(WorkKey id) {
 		super.setId(id)
 		
-		setHrId(id.getHrId())
-		setWorkStatusNo(id.getWorkStatusId())
+		hrId = id.hrId
+		workStatusNo = id.workStatusId
 	}
 	
 	// TODO
@@ -46,8 +46,7 @@ class Work extends EntityBase<WorkKey> {
 			endDate,
 			contractSalary]
 		
-		dataList.addAll(createDateColumns())
-		dataList.toArray()
+		dataList += createDateColumns()
 	}
 
 	@Override
@@ -62,7 +61,7 @@ class Work extends EntityBase<WorkKey> {
 		
 		readMetaCulumns(data, i)
 		
-		setId(new WorkKey(getHrId(), getWorkStatusNo()))
+		setId(new WorkKey(hrId, workStatusNo))
 	}
 
 }

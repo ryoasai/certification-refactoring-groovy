@@ -4,21 +4,13 @@ import sample.common.entity.Sequence
 
 class WorkKey implements Sequence<WorkKey>, Comparable<WorkKey> {
 
-	private final long hrId
-	private final long workStatusId
+	final long hrId
+	final long workStatusId
 	
 
 	WorkKey(long hrId, long workStatusId) {
 		this.hrId = hrId
 		this.workStatusId = workStatusId
-	}
-	
-	long getHrId() {
-		hrId
-	}
-	
-	long getWorkStatusId() {
-		workStatusId
 	}
 	
 	@Override
