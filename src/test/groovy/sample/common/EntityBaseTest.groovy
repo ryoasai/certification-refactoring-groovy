@@ -49,6 +49,7 @@ public class EntityBaseTest {
         assertEquals('30', array[2])
     }
 
+
     @Test
     void fromArray() {
 

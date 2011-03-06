@@ -19,6 +19,7 @@ public class SampleEntity extends EntityBase<Long> {
 		dataList += createDateColumns()
 	}
 
+
 	@Override
 	public void fromArray(String[] data) {
 		int i = 0
