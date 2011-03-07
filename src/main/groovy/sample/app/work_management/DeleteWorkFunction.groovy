@@ -15,48 +15,48 @@ import sample.repository.WorkRepository
 @Component
 class DeleteWorkFunction implements Function {
 
-	@Inject
-	WorkRepository workRepository
+    @Inject
+    WorkRepository workRepository
 
-	@Inject
-	HumanResourceRepository hrRepository
+    @Inject
+    HumanResourceRepository hrRepository
 
-	@Inject
-	WorkListView workListView
-	
-	@Inject
-	Console console
+    @Inject
+    WorkListView workListView
 
-	void run() {
+    @Inject
+    Console console
 
-		// 人材ID入力
-		long hrId = console.acceptLong('人材IDを入力してください。', {input ->
-			hrRepository.findById(input) != null // 人材ID存在チェック
-		})
+    void run() {
 
-		// 人材IDに関連する稼動リストの検索
-		List<Work> workList = findWorkListByHRId(hrId)
-		if (workList.isEmpty()) {
-			return
-		}
-		
-		 // 稼働状況を表示
-		workListView.display(workList)
-		
-		// 削除する稼働状況IDの取得
-		String workId = console.acceptFromIdList(workList, '削除したい稼働状況の番号を入力してください。')
+        // 人材ID入力
+        long hrId = console.acceptLong('人材IDを入力してください。', {input ->
+            hrRepository.findById(input) != null // 人材ID存在チェック
+        })
 
-		if (console.confirm('この情報を削除しますか？(Y はい　N いいえ)', 'Y', 'N')) {
-			workRepository.delete(new WorkKey(hrId, Long.parseLong(workId)))
-			console.display '削除しました。'		
-		}
-	}
+        // 人材IDに関連する稼動リストの検索
+        List<Work> workList = findWorkListByHRId(hrId)
+        if (workList.isEmpty()) {
+            return
+        }
 
-	private List<Work> findWorkListByHRId(long hrId) {
-		Work workExample = new Work()
-		workExample.hrId = hrId
-		
-		workRepository.findByExample(workExample)
-	}
+        // 稼働状況を表示
+        workListView.display(workList)
+
+        // 削除する稼働状況IDの取得
+        String workId = console.acceptFromIdList(workList, '削除したい稼働状況の番号を入力してください。')
+
+        if (console.confirm('この情報を削除しますか？(Y はい　N いいえ)', 'Y', 'N')) {
+            workRepository.delete(new WorkKey(hrId, Long.parseLong(workId)))
+            console.display '削除しました。'
+        }
+    }
+
+    private List<Work> findWorkListByHRId(long hrId) {
+        Work workExample = new Work()
+        workExample.hrId = hrId
+
+        workRepository.findByExample(workExample)
+    }
 
 }

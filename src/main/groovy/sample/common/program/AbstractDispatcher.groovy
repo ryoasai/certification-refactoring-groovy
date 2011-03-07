@@ -2,32 +2,32 @@ package sample.common.program
 
 abstract class AbstractDispatcher implements Runnable {
 
-	void run() {
-		
-		while (true) {
-			
-			beforeDisplayMenu()
-			
-			String inputCode = printMenuAndWaitForInput()
+    void run() {
 
-			if (isEndCommand(inputCode)) {
-				// 終了
-				break
-			}
-			
-			runFunction(inputCode)
-		}
-	}
+        while (true) {
 
-	protected void beforeDisplayMenu() {}
+            beforeDisplayMenu()
 
-	protected boolean isEndCommand(String inputCode) {
-		'E'.equals(inputCode)
-	}
+            String inputCode = printMenuAndWaitForInput()
 
-	protected abstract String printMenuAndWaitForInput()
-	
-	protected abstract void runFunction(String inputCode)
+            if (isEndCommand(inputCode)) {
+                // 終了
+                break
+            }
 
-	
+            runFunction(inputCode)
+        }
+    }
+
+    protected void beforeDisplayMenu() {}
+
+    protected boolean isEndCommand(String inputCode) {
+        'E'.equals(inputCode)
+    }
+
+    protected abstract String printMenuAndWaitForInput()
+
+    protected abstract void runFunction(String inputCode)
+
+
 }

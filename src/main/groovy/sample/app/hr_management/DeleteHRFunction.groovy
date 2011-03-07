@@ -12,44 +12,44 @@ import sample.repository.HumanResourceRepository
 @Component
 class DeleteHRFunction implements Function {
 
-	@Inject
-	HumanResourceRepository hrRepository
+    @Inject
+    HumanResourceRepository hrRepository
 
-	@Inject
-	Console console
+    @Inject
+    Console console
 
-	@Inject
-	HumanResourceView hrView
-	
-	private def selectedHumanResource
+    @Inject
+    HumanResourceView hrView
 
-	/**
-	 * 人材管理(削除)メニューの実行
-	 */
-	@Override
-	void run() {
-		selectHumanResource()
-		
-		deleteHumanResource()
-	}
+    private def selectedHumanResource
 
-	private void selectHumanResource() {
-		// 人材ID入力
-		long hrId = console.acceptLong('人材IDを入力してください。', {input ->
-			hrRepository.findById(input) != null
-		})
-		
-		selectedHumanResource = hrRepository.findById(hrId)
-		
-		hrView.display(selectedHumanResource)
-	}
-	
-	private void deleteHumanResource() {
-		if (console.confirm('この人材情報を削除しますか？(Y はい　N いいえ)', 'Y', 'N')) {
-			hrRepository.delete(selectedHumanResource.id)
-			
-			console.display '削除しました。'
-		}
-	}
+    /**
+     * 人材管理(削除)メニューの実行
+     */
+    @Override
+    void run() {
+        selectHumanResource()
+
+        deleteHumanResource()
+    }
+
+    private void selectHumanResource() {
+        // 人材ID入力
+        long hrId = console.acceptLong('人材IDを入力してください。', {input ->
+            hrRepository.findById(input) != null
+        })
+
+        selectedHumanResource = hrRepository.findById(hrId)
+
+        hrView.display(selectedHumanResource)
+    }
+
+    private void deleteHumanResource() {
+        if (console.confirm('この人材情報を削除しますか？(Y はい　N いいえ)', 'Y', 'N')) {
+            hrRepository.delete(selectedHumanResource.id)
+
+            console.display '削除しました。'
+        }
+    }
 
 }

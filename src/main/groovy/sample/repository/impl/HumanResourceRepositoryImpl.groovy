@@ -10,12 +10,11 @@ import sample.repository.HumanResourceRepository
 @Repository
 class HumanResourceRepositoryImpl extends CharSeparatedFileRepository<Long, HumanResource> implements HumanResourceRepository {
 
-	@Inject
-	HumanResourceRepositoryImpl(
-			@Value('${hr.master.file}') File masterFile, 
-			@Value('${hr.work.file}') File workFile) {
+    @Inject HumanResourceRepositoryImpl(
+    @Value('${hr.master.file}') File masterFile,
+    @Value('${hr.work.file}') File workFile) {
 
-		setMasterFile(masterFile)
-		setWorkFile(workFile)
-	}
+        setMasterFile(masterFile)
+        setWorkFile(workFile)
+    }
 }

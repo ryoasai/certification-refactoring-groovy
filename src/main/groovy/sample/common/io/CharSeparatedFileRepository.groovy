@@ -17,279 +17,279 @@ import sample.common.entity.Sequence
  * このクラスはステートを持ちスレッドセーフではない点に注意すること。
  */
 class CharSeparatedFileRepository<K extends Comparable<K>, E extends EntityBase<K>> implements
-		Repository<K, E> {
+Repository<K, E> {
 
-	// ====================================================
-	// フィールド
-	// ====================================================
+    // ====================================================
+    // フィールド
+    // ====================================================
 
-	File masterFile
+    File masterFile
 
-	File workFile
+    File workFile
 
-	String separator = '\t'
+    String separator = '\t'
 
-	Class<E> entityClass
-	
-	String encoding = 'utf-8'
-	
-	// ====================================================
-	// メソッド
-	// ====================================================
+    Class<E> entityClass
 
-	@PostConstruct
-	void init() {
-		if (entityClass != null) return
-		
-		// 親クラスの総称パラメータの型を取得
-		entityClass = (Class<E>)((ParameterizedType)getClass().getGenericSuperclass()).getActualTypeArguments()[1]
-	}
-	
-	private List<E> doFind(Closure matcher) {
-		try {
-			List<E> result = []
+    String encoding = 'utf-8'
 
-			// マスタから1行ずつ読込み
-			masterFile.eachLine(encoding, { line ->
-				
-				E entity = toEntity(line)
-				if (!entity.logicalDeleted && matcher.call(entity)) {
-					result.add(entity)
-				}
-			})
+    // ====================================================
+    // メソッド
+    // ====================================================
 
-			return result
+    @PostConstruct
+    void init() {
+        if (entityClass != null) return
 
-		} catch (IOException e) {
-			throw new SystemException('検索処理実行時にIO例外が発生しました。', e)
-		}
-	}
+        // 親クラスの総称パラメータの型を取得
+        entityClass = (Class<E>) ((ParameterizedType) getClass().getGenericSuperclass()).getActualTypeArguments()[1]
+    }
 
-	@Override
-	E findById(K id) {
-		def result = doFind {
-			ObjectUtils.equals(id, it.id)
-		}
+    private List<E> doFind(Closure matcher) {
+        try {
+            List<E> result = []
 
-		if (result.isEmpty()) {
-			throw new EntityNotFoundException("id = ${id}のエンティティは存在しません。")
-		}
+            // マスタから1行ずつ読込み
+            masterFile.eachLine(encoding, { line ->
 
-		// TODO 一意性チェックはしていない
-		result.get(0)
-	}
+                E entity = toEntity(line)
+                if (!entity.logicalDeleted && matcher.call(entity)) {
+                    result.add(entity)
+                }
+            })
 
-	@Override
-	List<E> findAll() {
-		doFind {
-			!it.logicalDeleted
-		}
-	}
+            return result
 
-	@Override
-	Map<K, E> findAllAsMap() {
-		Map<K, E> result = new HashMap<K, E>()
-		
-		for (E entity: findAll()) {
-			result.put(entity.getId(), entity)
-		}
-		
-		return result
-	}
+        } catch (IOException e) {
+            throw new SystemException('検索処理実行時にIO例外が発生しました。', e)
+        }
+    }
 
-	
-	@Override
-	List<E> findByExample(E example) {
+    @Override
+    E findById(K id) {
+        def result = doFind {
+            ObjectUtils.equals(id, it.id)
+        }
 
-		doFind {
-			if (it == null) return false
-		
-			PropertyDescriptor[] props = BeanUtils.getPropertyDescriptors(example.getClass())
-			
-			for (PropertyDescriptor prop in props) {
-				Method readMethod = prop.getReadMethod()
-				if (readMethod == null) continue
-				if (prop.getName().equals('class') || 
-					prop.getName().equals('metaClass') || 
-					prop.getName().equals('persisted')) continue
+        if (result.isEmpty()) {
+            throw new EntityNotFoundException("id = ${id}のエンティティは存在しません。")
+        }
+
+        // TODO 一意性チェックはしていない
+        result.get(0)
+    }
+
+    @Override
+    List<E> findAll() {
+        doFind {
+            !it.logicalDeleted
+        }
+    }
+
+    @Override
+    Map<K, E> findAllAsMap() {
+        Map<K, E> result = new HashMap<K, E>()
+
+        for (E entity: findAll()) {
+            result.put(entity.getId(), entity)
+        }
+
+        return result
+    }
+
+
+    @Override
+    List<E> findByExample(E example) {
+
+        doFind {
+            if (it == null) return false
+
+            PropertyDescriptor[] props = BeanUtils.getPropertyDescriptors(example.getClass())
+
+            for (PropertyDescriptor prop in props) {
+                Method readMethod = prop.getReadMethod()
+                if (readMethod == null) continue
+                if (prop.getName().equals('class') ||
+                        prop.getName().equals('metaClass') ||
+                        prop.getName().equals('persisted')) continue
 
                 // TODO Groovyのメタクラスを使って書き換える。
-				Object exampleValue = ReflectionUtils.invokeMethod(readMethod, example)
-				if (exampleValue == null) continue
-				if (exampleValue instanceof Long && (Long)(exampleValue) == 0) continue; // 基本型のlongの0は無視（いまいち）
-	
-				Object targetValue = ReflectionUtils.invokeMethod(readMethod, it)
-	
-				if (targetValue instanceof String && exampleValue instanceof String) { // 部分文字列一致
-					if ( ! ((String)targetValue).contains((String)exampleValue)) return false
-				} else {
-					if (!ObjectUtils.equals(exampleValue, targetValue)) return false
-				}
-			}
-			
-			true
-		}
-	}
+                Object exampleValue = ReflectionUtils.invokeMethod(readMethod, example)
+                if (exampleValue == null) continue
+                if (exampleValue instanceof Long && (Long) (exampleValue) == 0) continue; // 基本型のlongの0は無視（いまいち）
 
-	void processUpdate(Closure fileUpdator) {
-		try {
-			workFile.withWriter(encoding, { writer ->
-				fileUpdator.call(writer)
-			})
+                Object targetValue = ReflectionUtils.invokeMethod(readMethod, it)
 
-		} catch (IOException e) {
-			throw new SystemException('削除処理実行時にIO例外が発生しました。', e)
-		}
+                if (targetValue instanceof String && exampleValue instanceof String) { // 部分文字列一致
+                    if (!((String) targetValue).contains((String) exampleValue)) return false
+                } else {
+                    if (!ObjectUtils.equals(exampleValue, targetValue)) return false
+                }
+            }
 
-		commit()
-	}
+            true
+        }
+    }
 
-	void writeEntity(E data, Writer writer) throws IOException {
-		String outputLine = fromEntity(data)
-		writer.write(outputLine)
-		writer.newLine()
-	}
+    void processUpdate(Closure fileUpdator) {
+        try {
+            workFile.withWriter(encoding, { writer ->
+                fileUpdator.call(writer)
+            })
 
-	@Override
-	void create(final E data) {
-		if (data == null) throw new IllegalArgumentException('パラメーターが不正です。')
+        } catch (IOException e) {
+            throw new SystemException('削除処理実行時にIO例外が発生しました。', e)
+        }
 
-		processUpdate { writer ->
-			
-			List<K> idList = []
-			// マスタから1行ずつ読込み
-			masterFile.eachLine(encoding, { line ->
-				E entity = toEntity(line)
-				idList.add(entity.getId())
+        commit()
+    }
 
-				writeEntity(entity, writer)
-			})
+    void writeEntity(E data, Writer writer) throws IOException {
+        String outputLine = fromEntity(data)
+        writer.write(outputLine)
+        writer.newLine()
+    }
 
-			K maxId = Collections.max(idList)
-			data.setId(nextId(maxId))
+    @Override
+    void create(final E data) {
+        if (data == null) throw new IllegalArgumentException('パラメーターが不正です。')
 
-			data.preCreate(); // 更新、作成日付の発行
-			writeEntity(data, writer)
-		}
-	}
+        processUpdate { writer ->
 
-	K nextId(K maxId){
-		if (maxId instanceof Long) {
-			Object nextId = (Long)maxId + 1
-			return (K) nextId
-		} else if (maxId instanceof Sequence) {
-			return ((Sequence<K>)maxId).next()
-		} else {
-			throw new IllegalArgumentException('自動採番できません。')
-		}
-	}
+            List<K> idList = []
+            // マスタから1行ずつ読込み
+            masterFile.eachLine(encoding, { line ->
+                E entity = toEntity(line)
+                idList.add(entity.getId())
 
-	
-	@Override
-	void update(final E data) {
-		if (data == null)
-			throw new IllegalArgumentException('パラメーターが不正です。')
-		if (!data.isPersisted())
-			throw new IllegalArgumentException('パラメーターが永続化されていません。')
+                writeEntity(entity, writer)
+            })
 
-		processUpdate {writer ->
+            K maxId = Collections.max(idList)
+            data.setId(nextId(maxId))
 
-			// マスタから1行ずつ読込み
-			masterFile.eachLine(encoding, { line ->
-				E entity = toEntity(line)
-				if (data.getId().equals(entity.getId())) {
-					if (entity.isLogicalDeleted()) { // 既に論理削除済みの場合
-						throw new EntityNotFoundException("id = ${entity.id}のエンティティは既に論理削除されています。")
-					}
+            data.preCreate(); // 更新、作成日付の発行
+            writeEntity(data, writer)
+        }
+    }
 
-					data.preUpdate()
-					entity = data
-				}
+    K nextId(K maxId) {
+        if (maxId instanceof Long) {
+            Object nextId = (Long) maxId + 1
+            return (K) nextId
+        } else if (maxId instanceof Sequence) {
+            return ((Sequence<K>) maxId).next()
+        } else {
+            throw new IllegalArgumentException('自動採番できません。')
+        }
+    }
 
-				writeEntity(entity,  writer)
-			})
-		}
-	}
 
-	@Override
-	void delete(final K id) {
-		processUpdate { writer ->
-			boolean deleted = false
+    @Override
+    void update(final E data) {
+        if (data == null)
+            throw new IllegalArgumentException('パラメーターが不正です。')
+        if (!data.isPersisted())
+            throw new IllegalArgumentException('パラメーターが永続化されていません。')
 
-			// マスタから1行ずつ読込み
-			masterFile.eachLine(encoding, { line ->
-				E entity = toEntity(line)
-				
-				if (ObjectUtils.equals(id, entity.getId())) {
-					if (entity.isLogicalDeleted()) { // 既に論理削除済みの場合
-						throw new EntityNotFoundException("id = ${id}のエンティティは既に論理削除されています。")
-					}
+        processUpdate {writer ->
 
-					entity.logicalDelete()
-					deleted = true
-				}
+            // マスタから1行ずつ読込み
+            masterFile.eachLine(encoding, { line ->
+                E entity = toEntity(line)
+                if (data.getId().equals(entity.getId())) {
+                    if (entity.isLogicalDeleted()) { // 既に論理削除済みの場合
+                        throw new EntityNotFoundException("id = ${entity.id}のエンティティは既に論理削除されています。")
+                    }
 
-				writeEntity(entity, writer)
-			})
-			
-			if (!deleted) {
-				// パラメーターで指定されたエンティティが存在しなかった場合
-				throw new EntityNotFoundException("id = ${id}のエンティティは存在しません。")
-			}
-		}
-	}
+                    data.preUpdate()
+                    entity = data
+                }
 
-	String fromEntity(E entity) {
-		return StringUtils.join(entity.toArray(), getSeparator())
-	}
+                writeEntity(entity, writer)
+            })
+        }
+    }
 
-	E toEntity(String line) {
+    @Override
+    void delete(final K id) {
+        processUpdate { writer ->
+            boolean deleted = false
 
-		try {
-			E entity = entityClass.newInstance()
-			String[] data = parseLine(line)
-			
-			entity.fromArray(data)
+            // マスタから1行ずつ読込み
+            masterFile.eachLine(encoding, { line ->
+                E entity = toEntity(line)
 
-			return entity
-		} catch (InstantiationException e) {
-			throw new SystemException('エンティティの復元時に例外が発生しました。', e)
-		} catch (IllegalAccessException e) {
-			throw new SystemException('エンティティの復元時に例外が発生しました。', e)
-		}
-	}
+                if (ObjectUtils.equals(id, entity.getId())) {
+                    if (entity.isLogicalDeleted()) { // 既に論理削除済みの場合
+                        throw new EntityNotFoundException("id = ${id}のエンティティは既に論理削除されています。")
+                    }
 
-	protected String[] parseLine(String line) {
-		StringTokenizer st = new StringTokenizer(line, getSeparator(), true)
-		List<String> result = new ArrayList<String>()
-		String prevToken = ''
-		while (st.hasMoreTokens()) {
-			String token = st.nextToken()
-			
- 			if (prevToken.equals(getSeparator()) && token.equals(getSeparator()) ) {
- 				result.add(''); // 区切りが連続する場合は空文字をつめる。
- 			} else if (!getSeparator().equals(token)) {
- 				result.add(token)
- 			}
- 			
- 			prevToken = token
-		}
-		
-		return result.toArray(new String[result.size()])
-	}
+                    entity.logicalDelete()
+                    deleted = true
+                }
 
-	private void commit() {
-		try {
-			if (!masterFile.delete()) {
-				throw new IOException()
-			}
+                writeEntity(entity, writer)
+            })
 
-			// テンポラリーファイルをマスタに置換え
-			workFile.renameTo(masterFile)
+            if (!deleted) {
+                // パラメーターで指定されたエンティティが存在しなかった場合
+                throw new EntityNotFoundException("id = ${id}のエンティティは存在しません。")
+            }
+        }
+    }
 
-		} catch (IOException e) {
-			throw new SystemException('ワークファイルの変更をマスターファイルに反映できません。', e)
-		}
-	}
+    String fromEntity(E entity) {
+        return StringUtils.join(entity.toArray(), getSeparator())
+    }
+
+    E toEntity(String line) {
+
+        try {
+            E entity = entityClass.newInstance()
+            String[] data = parseLine(line)
+
+            entity.fromArray(data)
+
+            return entity
+        } catch (InstantiationException e) {
+            throw new SystemException('エンティティの復元時に例外が発生しました。', e)
+        } catch (IllegalAccessException e) {
+            throw new SystemException('エンティティの復元時に例外が発生しました。', e)
+        }
+    }
+
+    protected String[] parseLine(String line) {
+        StringTokenizer st = new StringTokenizer(line, getSeparator(), true)
+        List<String> result = new ArrayList<String>()
+        String prevToken = ''
+        while (st.hasMoreTokens()) {
+            String token = st.nextToken()
+
+            if (prevToken.equals(getSeparator()) && token.equals(getSeparator())) {
+                result.add(''); // 区切りが連続する場合は空文字をつめる。
+            } else if (!getSeparator().equals(token)) {
+                result.add(token)
+            }
+
+            prevToken = token
+        }
+
+        return result.toArray(new String[result.size()])
+    }
+
+    private void commit() {
+        try {
+            if (!masterFile.delete()) {
+                throw new IOException()
+            }
+
+            // テンポラリーファイルをマスタに置換え
+            workFile.renameTo(masterFile)
+
+        } catch (IOException e) {
+            throw new SystemException('ワークファイルの変更をマスターファイルに反映できません。', e)
+        }
+    }
 
 }

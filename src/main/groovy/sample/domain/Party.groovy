@@ -5,22 +5,22 @@ import sample.common.entity.NameId
 
 abstract class Party extends EntityBase<Long> implements NameId<Long> {
 
-	/** 氏名 */
-	String name
+    /** 氏名  */
+    String name
 
-	/** 郵便番号 */
-	String postalCode
+    /** 郵便番号  */
+    String postalCode
 
-	/** 住所 */
-	String address
+    /** 住所  */
+    String address
 
-	/** 電話番号 */
-	String telephoneNo
+    /** 電話番号  */
+    String telephoneNo
 
-	/** FAX番号 */
-	String faxNo
+    /** FAX番号  */
+    String faxNo
 
-	/** emailアドレス */
-	String email
+    /** emailアドレス  */
+    String email
 
 }

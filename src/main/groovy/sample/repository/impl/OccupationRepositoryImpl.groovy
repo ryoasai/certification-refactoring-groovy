@@ -10,13 +10,12 @@ import sample.repository.OccupationRepository
 @Repository
 class OccupationRepositoryImpl extends CharSeparatedFileRepository<Long, Occupation> implements OccupationRepository {
 
-	@Inject
-	OccupationRepositoryImpl(
-			@Value('${occupation.master.file}') File masterFile, 
-			@Value('${occupation.work.file}') File workFile) {
+    @Inject OccupationRepositoryImpl(
+    @Value('${occupation.master.file}') File masterFile,
+    @Value('${occupation.work.file}') File workFile) {
 
-		setMasterFile(masterFile)
-		setWorkFile(workFile)
-	}
+        setMasterFile(masterFile)
+        setWorkFile(workFile)
+    }
 
 }

@@ -10,29 +10,29 @@ import static junit.framework.Assert.assertEquals
 
 public class EntityBaseTest {
 
-	SampleEntity sample = new SampleEntity()
+    SampleEntity sample = new SampleEntity()
 
-	@Before
-	public void setUp() throws Exception {
-	}
+    @Before
+    public void setUp() throws Exception {
+    }
 
-	@Test
-	void logicalDelete() {
-		assertFalse(sample.isLogicalDeleted())
+    @Test
+    void logicalDelete() {
+        assertFalse(sample.isLogicalDeleted())
 
-		sample.logicalDelete()
-		assertTrue(sample.isLogicalDeleted())
-	}
+        sample.logicalDelete()
+        assertTrue(sample.isLogicalDeleted())
+    }
 
-	@Test(expected=IllegalStateException.class)
-	void logicalDelete_AlreadyDeleted() {
-		assertFalse(sample.isLogicalDeleted())
+    @Test(expected = IllegalStateException.class)
+    void logicalDelete_AlreadyDeleted() {
+        assertFalse(sample.isLogicalDeleted())
 
-		sample.logicalDelete()
-		
-		// 既に論理削除済みの場合例外となる。
-		sample.logicalDelete()
-	}
+        sample.logicalDelete()
+
+        // 既に論理削除済みの場合例外となる。
+        sample.logicalDelete()
+    }
 
     @Test
     void toArray() {

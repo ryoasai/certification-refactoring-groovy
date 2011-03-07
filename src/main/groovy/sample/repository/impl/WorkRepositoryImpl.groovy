@@ -11,16 +11,15 @@ import sample.repository.WorkRepository
 @Repository
 class WorkRepositoryImpl extends CharSeparatedFileRepository<WorkKey, Work> implements WorkRepository {
 
-	@Inject
-	WorkRepositoryImpl(
-			@Value('${work.master.file}') File masterFile, 
-			@Value('${work.work.file}') File workFile) {
+    @Inject WorkRepositoryImpl(
+    @Value('${work.master.file}') File masterFile,
+    @Value('${work.work.file}') File workFile) {
 
-		setMasterFile(masterFile)
-		setWorkFile(workFile)
-		
-		println(masterFile)
-		println(workFile)
-	}
+        setMasterFile(masterFile)
+        setWorkFile(workFile)
+
+        println(masterFile)
+        println(workFile)
+    }
 }
 

@@ -3,22 +3,22 @@ package sample.common.io
 import sample.common.SystemException
 
 class EntityNotFoundException extends SystemException {
-	private static final long serialVersionUID = 1L
-	
-	EntityNotFoundException() {
-		super()
-	}
+    private static final long serialVersionUID = 1L
 
-	EntityNotFoundException(String message, Throwable cause) {
-		super(message, cause)
-	}
+    EntityNotFoundException() {
+        super()
+    }
 
-	EntityNotFoundException(String message) {
-		super(message)
-	}
+    EntityNotFoundException(String message, Throwable cause) {
+        super(message, cause)
+    }
 
-	EntityNotFoundException(Throwable cause) {
-		super(cause)
-	}
+    EntityNotFoundException(String message) {
+        super(message)
+    }
+
+    EntityNotFoundException(Throwable cause) {
+        super(cause)
+    }
 
 }

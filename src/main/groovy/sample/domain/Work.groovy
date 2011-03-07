@@ -7,61 +7,61 @@ import sample.common.entity.EntityBase
  */
 class Work extends EntityBase<WorkKey> {
 
-	/** 人材ID */
-	long hrId
-	
-	long workStatusNo
+    /** 人材ID  */
+    long hrId
 
-	/** 取引先ID */
-	long partnerId
+    long workStatusNo
 
-	/** 稼動開始日 */
-	String startDate
+    /** 取引先ID  */
+    long partnerId
 
-	/** 稼動終了日 */
-	String endDate
+    /** 稼動開始日  */
+    String startDate
 
-	/** 契約単価 */
-	String contractSalary
+    /** 稼動終了日  */
+    String endDate
 
-	@Override
-	void setId(WorkKey id) {
-		super.setId(id)
-		
-		hrId = id.hrId
-		workStatusNo = id.workStatusId
-	}
-	
-	// TODO
-	// 以下の部分のコードはメタ情報からで自動生成できるはず
-	
-	@Override
-	String[] toArray() {
-			
-		def dataList = [
-			hrId,
-			workStatusNo,
-			partnerId,
-			startDate,
-			endDate,
-			contractSalary]
-		
-		dataList + createDateColumns()
-	}
+    /** 契約単価  */
+    String contractSalary
 
-	@Override
-	void fromArray(String[] data) {
-		int i = 0
-		hrId = data[i++].toLong()
-		workStatusNo = data[i++].toLong()
-		partnerId = data[i++].toLong()
-		startDate = data[i++]
-		endDate = data[i++]
-		contractSalary = data[i++]
-		
-		readMetaCulumns(data, i)
-		
-		setId(new WorkKey(hrId, workStatusNo))
-	}
+    @Override
+    void setId(WorkKey id) {
+        super.setId(id)
+
+        hrId = id.hrId
+        workStatusNo = id.workStatusId
+    }
+
+    // TODO
+    // 以下の部分のコードはメタ情報からで自動生成できるはず
+
+    @Override
+    String[] toArray() {
+
+        def dataList = [
+                hrId,
+                workStatusNo,
+                partnerId,
+                startDate,
+                endDate,
+                contractSalary]
+
+        dataList + createDateColumns()
+    }
+
+    @Override
+    void fromArray(String[] data) {
+        int i = 0
+        hrId = data[i++].toLong()
+        workStatusNo = data[i++].toLong()
+        partnerId = data[i++].toLong()
+        startDate = data[i++]
+        endDate = data[i++]
+        contractSalary = data[i++]
+
+        readMetaCulumns(data, i)
+
+        setId(new WorkKey(hrId, workStatusNo))
+    }
 
 }
