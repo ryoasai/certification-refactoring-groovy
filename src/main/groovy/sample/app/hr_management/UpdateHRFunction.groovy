@@ -86,7 +86,7 @@ class UpdateHRFunction implements Function {
 				buf << '\t'
 		}
 		
-		buf.append('\n[1-12]>')
+		buf << '\n[1-12]>'
 	}
 
 	/**

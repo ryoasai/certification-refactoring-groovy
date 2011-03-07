@@ -30,15 +30,6 @@ class HumanResourceView implements View<HumanResource> {
         schoolBackground:'最終学歴',
         requestedSalary:'希望単価' ]
 
-    static final def LINE_BREAK_AFTER = [
-            '郵便番号',
-            '住所',
-            'FAX番号',
-            'e-mailアドレス',
-            '性別',
-            '経験年数',
-    ] as Set
-
 	@Inject
 	OccupationRepository occupationRepository
 
@@ -53,40 +44,16 @@ class HumanResourceView implements View<HumanResource> {
 	}
 
 	void display(HumanResource hr) {
-		
+		final def TEMPLATE = """
+        人材ID ${hr.id}    氏名 ${hr.name}  郵便番号 ${hr.postalCode}
+        住所 ${hr.address} 電話番号 ${hr.telephoneNo}   FAX番号 ${hr.faxNo}
+        e-mailアドレス ${hr.email}  生年月日 ${hr.birthDay}   性別 ${hr.genderType == 'M' ? '男': '女'}
+        業種 ${getOccupationName(hr.occupationId)} 経験年数 ${hr.yearOfExperience}年
+        最終学歴 ${hr.schoolBackground}   希望単価 ${hr.requestedSalary}円
+        """.stripIndent()
+
 		console.display '' // 改行
-
-		// 人材情報の表示
-		FIELDS_MAP.each { key, value ->
-			StringBuilder sb = new StringBuilder("${value}  : ")
-			
-			if (value == '性別') {
-				if (hr.genderType == 'M') {
-					sb << '男'
-				} else if (hr.genderType == 'F') {
-					sb << '女'
-				}
-			
-			} else if (value == '業種') {
-				sb << getOccupationName(hr.occupationId)
-			} else {
-				sb << hr.properties[key]
-			}
-			
-			if (value == '経験年数') {
-				sb << '年'
-			} else if (value == '希望単価') {
-				sb << '円'
-			}
-
-			if (LINE_BREAK_AFTER.contains(value)) {
-				sb << '\n'
-			} else {
-				sb << '\t'
-			}
-			
-			console.display sb.toString()
-		}
+        console.display TEMPLATE
 	}
 	
 	/**
