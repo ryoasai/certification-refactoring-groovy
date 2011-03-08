@@ -6,6 +6,7 @@ import sample.common.console.Console
 import sample.common.program.Function
 import sample.repository.HumanResourceRepository
 import sample.repository.OccupationRepository
+import sample.domain.HumanResource
 
 /**
  * 人材情報更新
@@ -59,35 +60,11 @@ class UpdateHRFunction implements Function {
 
 
     private int inputItemNo() {
-        StringBuilder sb = new StringBuilder()
-        sb.append('\n更新したい項目を入力してください。\n')
+        console.display '更新したい項目を入力してください。'
 
-        displayMenuItems(sb)
-
-        console.acceptInt(sb.toString())
+        console.acceptFromMenuItems(HumanResource.FIELDS_MAP, 30)
     }
 
-    private void displayMenuItems(StringBuilder buf) {
-        HumanResourceView.FIELDS_MAP.eachWithIndex {key, value, i ->
-            if (i == 0) return
-
-            buf << i
-            buf << '.'
-            buf << value
-
-            // TODO かなり醜いロジックだが、現状のロジックを保存しておく。
-            // 本来はタブ位置を汎用的に自動調整するロジックを書くべき
-
-            if (i == 1 || i == 8 || i == 9)
-                buf << '\t'
-            if (i == 3 || i == 5 || i == 7 || i == 10 || i == 12)
-                buf << '\n'
-            else if (i != 6)
-                buf << '\t'
-        }
-
-        buf << '\n[1-12]>'
-    }
 
     /**
      * 人材情報の入力

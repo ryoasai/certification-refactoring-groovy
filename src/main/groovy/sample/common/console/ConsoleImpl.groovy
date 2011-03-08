@@ -71,6 +71,36 @@ class ConsoleImpl implements Console {
         }
     }
 
+    int acceptFromMenuItems(Map<String, String> menuMap, int maxWidth = 80) {
+        StringBuilder buf = new StringBuilder()
+        menuMap.eachWithIndex {key, value, i ->
+            def item = "${i + 1}.${value}"
+            buf << item << ' '
+        }
+
+        console.display wrap(buf.toString(), maxWidth)
+        console.acceptInt("[1-${menuMap.size()}]>")
+    }
+
+    private def wrap(text, maxWidth = 80) {
+        def line = new StringBuilder()
+        def allLines = []
+
+        text.eachMatch(/\S+/) { item ->
+            if (line.size() + 8 + item.size() > maxWidth) {
+                allLines << line.toString()
+                line = new StringBuilder()
+            }
+
+            line << (line.length() == 0 ? item : '\t' + item)
+        }
+
+        allLines << line.toString()
+
+        allLines.join('\n')
+    }
+
+
     @Override
     int acceptInt(String message) {
         while (true) {

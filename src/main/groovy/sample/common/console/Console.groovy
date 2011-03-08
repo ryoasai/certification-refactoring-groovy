@@ -40,6 +40,8 @@ interface Console {
      */
     String accept(String message, Closure validInput)
 
+    int acceptFromMenuItems(Map<String, String> menuMap, int maxWidth)
+
     /**
      * メッセージとともに入力プロンプトを表示し、標準入力からの整数入力を受け付ける
      *

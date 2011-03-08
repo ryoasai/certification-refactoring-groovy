@@ -23,44 +23,37 @@ class InputHRFunction implements Function {
     @Inject
     Console console
 
-    private def selectedHumanResource
-
     /**
      * 人材管理(追加)の実行
      */
     void run() {
 
-        selectedHumanResource = new HumanResource()
-        selectedHumanResource.fromArray(inputData())
+        def hr = new HumanResource()
+        inputData(hr)
 
-        hrRepository.create(selectedHumanResource)
+        hrRepository.create(hr)
 
-        console.display "人材ID： ${selectedHumanResource.id}で登録されました。"
+        console.display "人材ID： ${hr.id}で登録されました。"
     }
 
     /**
      * 人材情報の入力
-     *
-     * @param occupationList
-     *            業種リストを表す文字列配列
-     * @return 入力情報
      */
-    String[] inputData() {
-        def data = []
+    private def inputData(def hr) {
 
-        HumanResourceView.FIELDS_MAP.each { key, value ->
+        HumanResource.FIELDS_MAP.each { key, value ->
+            def message = "${value}を入力してください。"
+
             if (value == '性別') {
-                data << console.accept("${value}を入力してください。", {input ->
+                hr[key] = console.accept(message, {input ->
                     'M'.equals(input) || 'F'.equals(input)
                 })
 
             } else if (value == '業種') {
-                data << console.acceptFromIdList(occupationRespository.findAll(), "${value}を入力してください。")
+                hr[key] = console.acceptFromIdList(occupationRespository.findAll(), message)
             } else {
-                data << console.accept("${value}を入力してください。")
+                hr[key] = console.accept(message)
             }
         }
-
-        data
     }
 }

@@ -15,20 +15,6 @@ import sample.repository.OccupationRepository
 @Component
 class HumanResourceView implements View<HumanResource> {
 
-    static final def FIELDS_MAP = [
-            id: '人材ID',
-            name: '氏名',
-            postalCode: '郵便番号',
-            address: '住所',
-            telephoneNo: '電話番号',
-            faxNo: 'FAX番号',
-            email: 'e-mailアドレス',
-            birthDay: '生年月日',
-            genderType: '性別',
-            occupationId: '業種',
-            yearOfExperience: '経験年数',
-            schoolBackground: '最終学歴',
-            requestedSalary: '希望単価']
 
     @Inject
     OccupationRepository occupationRepository
