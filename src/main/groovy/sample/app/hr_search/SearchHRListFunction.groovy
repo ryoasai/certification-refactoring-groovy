@@ -27,7 +27,7 @@ class SearchHRListFunction extends AbstractDispatcher implements Function {
     /**
      * 検索方法コード一覧のリスト
      */
-    private static final List<String> CODE_LIST = ['N', 'T', 'E']
+    private static final def CODE_LIST = ['N', 'T', 'E']
 
     @Inject
     HumanResourceRepository hrRepository
@@ -57,38 +57,38 @@ class SearchHRListFunction extends AbstractDispatcher implements Function {
     @Override
     protected void runFunction(String code) {
 
-        if ('N'.equals(code)) {
-            String input = console.accept('氏名に含まれる文字列を指定してください。')
+        if ('N' == code) {
+            def input = console.accept('氏名に含まれる文字列を指定してください。')
             searchHRListByName(input)
 
-        } else if ('T'.equals(code)) {
+        } else if ('T' == code) {
 
-            List<Occupation> occupationList = occupationRepository.findAll(); // 業種リストの取得
-            String occupationType = console.acceptFromNameIdList(occupationList, '\n業種を選択してください。')
+            def occupationList = occupationRepository.findAll() // 業種リストの取得
+            def occupationType = console.acceptFromNameIdList(occupationList, '\n業種を選択してください。')
 
             // 業種IDから人材検索
-            searchHRListByOccupationType(Long.valueOf(occupationType))
+            searchHRListByOccupationType(occupationType?.toLong())
         }
     }
 
-    private void searchHRListByName(String name) {
+    private def searchHRListByName(String name) {
 
-        HumanResource exampleHR = new HumanResource();
+        def exampleHR = new HumanResource();
         exampleHR.setName(name)
 
         doSearchHRList(exampleHR)
     }
 
-    private void searchHRListByOccupationType(long occupationId) {
+    private def searchHRListByOccupationType(long occupationId) {
 
-        HumanResource exampleHR = new HumanResource();
+        def exampleHR = new HumanResource();
         exampleHR.setOccupationId(occupationId)
 
         doSearchHRList(exampleHR)
     }
 
-    private void doSearchHRList(HumanResource exampleHR) {
-        List<HumanResource> hrList = hrRepository.findByExample(exampleHR)
+    private def doSearchHRList(HumanResource exampleHR) {
+        def hrList = hrRepository.findByExample(exampleHR)
         hrListView.display(hrList)
     }
 }

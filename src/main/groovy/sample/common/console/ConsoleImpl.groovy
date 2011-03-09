@@ -2,7 +2,6 @@ package sample.common.console
 
 import java.text.ParseException
 import java.text.SimpleDateFormat
-import org.apache.commons.lang.ObjectUtils
 import org.springframework.stereotype.Component
 import sample.common.entity.Identifiable
 import sample.common.entity.NameId
@@ -78,8 +77,15 @@ class ConsoleImpl implements Console {
             buf << item << ' '
         }
 
-        console.display wrap(buf.toString(), maxWidth)
-        console.acceptInt("[1-${menuMap.size()}]>")
+        display wrap(buf.toString(), maxWidth)
+        acceptInt("[1-${menuMap.size()}]>") {it ->
+            if (it < 1 || it > menuMap.size()) { // 項目番号入力エラー
+                display '項目番号の入力が正しくありません。'
+                return false
+            }
+
+            true
+        }
     }
 
     private def wrap(text, maxWidth = 80) {
@@ -107,7 +113,7 @@ class ConsoleImpl implements Console {
             try {
                 String input = accept(message);
 
-                return Integer.parseInt(input)
+                return input.toInteger()
             } catch (NumberFormatException e) {
                 e.printStackTrace()
             }
@@ -138,7 +144,7 @@ class ConsoleImpl implements Console {
             try {
                 String input = accept(message);
 
-                return Long.parseLong(input)
+                return input.toLong()
             } catch (NumberFormatException e) {
                 e.printStackTrace()
             }
@@ -184,79 +190,12 @@ class ConsoleImpl implements Console {
 
     @Override
     String acceptFromNameIdList(List<? extends NameId<?>> selectList, String message) {
-        String result = null
-        while (true) {
-            println message
-            print nameIdListToString(selectList) + promptString
-
-            result = doAcceptChars()
-            if (isValidId(selectList, result)) {
-                return result
-            }
-        }
-    }
-
-    private boolean isValidId(List<? extends Identifiable<?>> idList, String id) {
-        for (Identifiable<?> identifiable: idList) {
-            if (id.equals(ObjectUtils.toString(identifiable.getId()))) {
-                return true
-            }
-        }
-
-        false
-    }
-
-
-    private String nameIdListToString(List<? extends NameId<?>> nameIdList) {
-        StringBuilder buff = new StringBuilder()
-        for (NameId<?> partner: nameIdList) {
-            buff.append(partner.getId() + ' ' + partner.getName())
-            buff.append('\n')
-        }
-
-        buff.append(' ['); // IDリストの表示
-        for (NameId<?> partner: nameIdList) {
-            buff.append(partner.getId())
-            buff.append(',')
-        }
-        buff.deleteCharAt(buff.length() - 1); // 末尾の','を削除
-        buff.append(']')
-
-        buff.toString()
+        doAcceptFromIdList(selectList, message)
     }
 
     @Override
     String acceptFromIdList(List<? extends Identifiable<?>> selectList, String message) {
-
-        String result = null
-        while (true) {
-            println(message)
-            print(idListToString(selectList) + promptString)
-
-            result = doAcceptChars()
-            if (isValidId(selectList, result)) {
-                return result
-            }
-        }
-    }
-
-
-    private String idListToString(List<? extends Identifiable<?>> idList) {
-        StringBuilder buff = new StringBuilder()
-        for (Identifiable<?> partner: idList) {
-            buff.append(partner.getId())
-            buff.append('\n')
-        }
-
-        buff.append(' ['); // IDリストの表示
-        for (Identifiable<?> partner: idList) {
-            buff.append(partner.getId())
-            buff.append(',')
-        }
-        buff.deleteCharAt(buff.length() - 1); // 末尾の','を削除
-        buff.append(']')
-
-        buff.toString()
+        doAcceptFromIdList(selectList, message)
     }
 
     @Override
@@ -270,6 +209,50 @@ class ConsoleImpl implements Console {
             if (selectList.contains(result)) return result
         }
     }
+
+    private boolean isValidId(List itemList, String id) {
+        itemList.any {
+            it.id?.toString() == id
+        }
+    }
+
+    private String doAcceptFromIdList(List selectList, String message) {
+
+        String result = null
+        while (true) {
+            println(message)
+            print(listToString(selectList) + promptString)
+
+            result = doAcceptChars()
+            if (isValidId(selectList, result)) {
+                return result
+            }
+        }
+    }
+
+
+    private String listToString(itemList) {
+        def sb = new StringBuilder()
+        itemList.each {
+            sb << it.id
+            if (it instanceof NameId) {
+                sb << ' '
+                sb << it.name
+            }
+            sb << '\n'
+        }
+
+        sb << ' [' // IDリストの表示
+        itemList.each {
+            sb << it.id
+           sb << ','
+        }
+        sb.deleteCharAt(sb.length() - 1); // 末尾の','を削除
+        sb << ']'
+
+        sb.toString()
+    }
+
 
     /**
      * キーボードからの入力受取り

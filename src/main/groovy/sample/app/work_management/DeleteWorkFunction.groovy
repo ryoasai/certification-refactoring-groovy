@@ -30,12 +30,12 @@ class DeleteWorkFunction implements Function {
     void run() {
 
         // 人材ID入力
-        long hrId = console.acceptLong('人材IDを入力してください。', {input ->
+        def hrId = console.acceptLong('人材IDを入力してください。') {input ->
             hrRepository.findById(input) != null // 人材ID存在チェック
-        })
+        }
 
         // 人材IDに関連する稼動リストの検索
-        List<Work> workList = findWorkListByHRId(hrId)
+        def workList = findWorkListByHRId(hrId)
         if (workList.isEmpty()) {
             return
         }
@@ -44,16 +44,16 @@ class DeleteWorkFunction implements Function {
         workListView.display(workList)
 
         // 削除する稼働状況IDの取得
-        String workId = console.acceptFromIdList(workList, '削除したい稼働状況の番号を入力してください。')
+        def workId = console.acceptFromIdList(workList, '削除したい稼働状況の番号を入力してください。')
 
         if (console.confirm('この情報を削除しますか？(Y はい　N いいえ)', 'Y', 'N')) {
-            workRepository.delete(new WorkKey(hrId, Long.parseLong(workId)))
+            workRepository.delete(new WorkKey(hrId, workId.toLong()))
             console.display '削除しました。'
         }
     }
 
-    private List<Work> findWorkListByHRId(long hrId) {
-        Work workExample = new Work()
+    private def findWorkListByHRId(long hrId) {
+        def workExample = new Work()
         workExample.hrId = hrId
 
         workRepository.findByExample(workExample)

@@ -21,32 +21,28 @@ class DeleteHRFunction implements Function {
     @Inject
     HumanResourceView hrView
 
-    private def selectedHumanResource
-
     /**
      * 人材管理(削除)メニューの実行
      */
     @Override
     void run() {
-        selectHumanResource()
-
-        deleteHumanResource()
+        def hr = selectHumanResource()
+        hrView.display hr
+        deleteHumanResource(hr)
     }
 
-    private void selectHumanResource() {
+    private def selectHumanResource() {
         // 人材ID入力
-        long hrId = console.acceptLong('人材IDを入力してください。', {input ->
+        long hrId = console.acceptLong('人材IDを入力してください。') {input ->
             hrRepository.findById(input) != null
-        })
+        }
 
-        selectedHumanResource = hrRepository.findById(hrId)
-
-        hrView.display(selectedHumanResource)
+        hrRepository.findById(hrId)
     }
 
-    private void deleteHumanResource() {
+    private def deleteHumanResource(hr) {
         if (console.confirm('この人材情報を削除しますか？(Y はい　N いいえ)', 'Y', 'N')) {
-            hrRepository.delete(selectedHumanResource.id)
+            hrRepository.delete(hr.id)
 
             console.display '削除しました。'
         }

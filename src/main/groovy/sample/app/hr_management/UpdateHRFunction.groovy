@@ -26,36 +26,28 @@ class UpdateHRFunction implements Function {
     @Inject
     Console console
 
-    private def selectedHumanResource
-
     /**
      * 人材管理(更新)メニューの実行
      */
     void run() {
-        selectHumanResource()
+        def hr = selectHumanResource()
+        hrView.display hr
 
         int itemNo = inputItemNo()
-        if (itemNo < 1 || itemNo > 12) { // 項目番号入力エラー
-            console.display '項目番号の入力が正しくありません。'
-            console.display '更新できませんでした。'
-            return
-        }
 
-        inputData(itemNo)
+        inputData(hr, HumanResource.FIELDS_MAP.entrySet().toList()[itemNo - 1])
 
         // 入力された値をファイルに保存
-        hrRepository.update(selectedHumanResource)
+        hrRepository.update(hr)
     }
 
-    private void selectHumanResource() {
+    private def selectHumanResource() {
         // 人材ID入力
-        long hrId = console.acceptLong('人材IDを入力してください。', {input ->
+        long hrId = console.acceptLong('人材IDを入力してください。') {input ->
             hrRepository.findById(input) != null // 人材存在チェック
-        })
+        }
 
-        selectedHumanResource = hrRepository.findById(hrId)
-
-        hrView.display selectedHumanResource
+        hrRepository.findById(hrId)
     }
 
 
@@ -73,21 +65,19 @@ class UpdateHRFunction implements Function {
      *            業種リストを表す文字列配列
      * @return 入力情報
      */
-    void inputData(int itemNo) {
-        String[] data = selectedHumanResource.toArray()
+    private def inputData(hr, selectedField) {
+        def message = '更新後の値を入力してください。'
 
-        if (itemNo == 8) {
-            data[itemNo] = console.accept('更新後の値を入力してください。(M：男性 F：女性)\n[M,F]', {input ->
+        if (selectedField.value == '性別') {
+            hr[selectedField.key] = console.accept(message + '(M：男性 F：女性)\n[M,F]') {input ->
                 'M'.equals(input) || 'F'.equals(input)
-            })
+            }
 
-        } else if (itemNo == 9) {
-            data[itemNo] = console.acceptFromIdList(occupationRespository.findAll(), '更新後の値を入力してください。')
+        } else if (selectedField.value == '業種') {
+            hr[selectedField.key] = console.acceptFromIdList(occupationRespository.findAll(), message)
         } else {
-            data[itemNo] = console.accept('更新後の値を入力してください。')
+            hr[selectedField.key] = console.accept(message)
         }
-
-        selectedHumanResource.fromArray(data)
     }
 
 }

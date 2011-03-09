@@ -1,13 +1,7 @@
 package sample.common.io
 
-import java.beans.PropertyDescriptor
-import java.lang.reflect.Method
 import java.lang.reflect.ParameterizedType
 import javax.annotation.PostConstruct
-import org.apache.commons.lang.ObjectUtils
-import org.apache.commons.lang.StringUtils
-import org.springframework.beans.BeanUtils
-import org.springframework.util.ReflectionUtils
 import sample.common.SystemException
 import sample.common.entity.EntityBase
 import sample.common.entity.Sequence
@@ -50,13 +44,13 @@ Repository<K, E> {
             List<E> result = []
 
             // マスタから1行ずつ読込み
-            masterFile.eachLine(encoding, { line ->
+            masterFile.eachLine(encoding) { line ->
 
                 E entity = toEntity(line)
                 if (!entity.logicalDeleted && matcher.call(entity)) {
                     result.add(entity)
                 }
-            })
+            }
 
             return result
 
@@ -68,7 +62,7 @@ Repository<K, E> {
     @Override
     E findById(K id) {
         def result = doFind {
-            ObjectUtils.equals(id, it.id)
+            id == it.id
         }
 
         if (result.isEmpty()) {
@@ -88,13 +82,13 @@ Repository<K, E> {
 
     @Override
     Map<K, E> findAllAsMap() {
-        Map<K, E> result = new HashMap<K, E>()
+        def result = [:]
 
-        for (E entity: findAll()) {
-            result.put(entity.getId(), entity)
+        findAll().each {entity ->
+            result[entity] = entity
         }
 
-        return result
+        result
     }
 
 
@@ -104,38 +98,33 @@ Repository<K, E> {
         doFind {
             if (it == null) return false
 
-            PropertyDescriptor[] props = BeanUtils.getPropertyDescriptors(example.getClass())
+            def hasUnequalValue = example.properties.any { key, value ->
+                // 以下のプロパティ値は比較対象外とする
+                if (key == 'class' ||
+                        key == 'metaClass' ||
+                        key == 'persisted') return false
 
-            for (PropertyDescriptor prop in props) {
-                Method readMethod = prop.getReadMethod()
-                if (readMethod == null) continue
-                if (prop.getName().equals('class') ||
-                        prop.getName().equals('metaClass') ||
-                        prop.getName().equals('persisted')) continue
+                if (value == null) return false
+                if (value == 0L) return false // 基本型のlongの0は無視（いまいち）
 
-                // TODO Groovyのメタクラスを使って書き換える。
-                Object exampleValue = ReflectionUtils.invokeMethod(readMethod, example)
-                if (exampleValue == null) continue
-                if (exampleValue instanceof Long && (Long) (exampleValue) == 0) continue; // 基本型のlongの0は無視（いまいち）
+                def targetValue = it[key]
 
-                Object targetValue = ReflectionUtils.invokeMethod(readMethod, it)
-
-                if (targetValue instanceof String && exampleValue instanceof String) { // 部分文字列一致
-                    if (!((String) targetValue).contains((String) exampleValue)) return false
+                if (targetValue instanceof String && value instanceof String) {
+                    !targetValue.contains(value) // 文字列は部分一致
                 } else {
-                    if (!ObjectUtils.equals(exampleValue, targetValue)) return false
+                    value != targetValue // その他の値は完全一致
                 }
             }
 
-            true
+            !hasUnequalValue
         }
     }
 
     void processUpdate(Closure fileUpdator) {
         try {
-            workFile.withWriter(encoding, { writer ->
+            workFile.withWriter(encoding) { writer ->
                 fileUpdator.call(writer)
-            })
+            }
 
         } catch (IOException e) {
             throw new SystemException('削除処理実行時にIO例外が発生しました。', e)
@@ -158,12 +147,12 @@ Repository<K, E> {
 
             List<K> idList = []
             // マスタから1行ずつ読込み
-            masterFile.eachLine(encoding, { line ->
+            masterFile.eachLine(encoding) { line ->
                 E entity = toEntity(line)
                 idList.add(entity.getId())
 
                 writeEntity(entity, writer)
-            })
+            }
 
             K maxId = Collections.max(idList)
             data.setId(nextId(maxId))
@@ -175,10 +164,9 @@ Repository<K, E> {
 
     K nextId(K maxId) {
         if (maxId instanceof Long) {
-            Object nextId = (Long) maxId + 1
-            return (K) nextId
+            maxId + 1
         } else if (maxId instanceof Sequence) {
-            return ((Sequence<K>) maxId).next()
+            maxId.next()
         } else {
             throw new IllegalArgumentException('自動採番できません。')
         }
@@ -195,10 +183,10 @@ Repository<K, E> {
         processUpdate {writer ->
 
             // マスタから1行ずつ読込み
-            masterFile.eachLine(encoding, { line ->
+            masterFile.eachLine(encoding) { line ->
                 E entity = toEntity(line)
-                if (data.getId().equals(entity.getId())) {
-                    if (entity.isLogicalDeleted()) { // 既に論理削除済みの場合
+                if (data.id == entity.id) {
+                    if (entity.logicalDeleted) { // 既に論理削除済みの場合
                         throw new EntityNotFoundException("id = ${entity.id}のエンティティは既に論理削除されています。")
                     }
 
@@ -207,7 +195,7 @@ Repository<K, E> {
                 }
 
                 writeEntity(entity, writer)
-            })
+            }
         }
     }
 
@@ -217,11 +205,11 @@ Repository<K, E> {
             boolean deleted = false
 
             // マスタから1行ずつ読込み
-            masterFile.eachLine(encoding, { line ->
+            masterFile.eachLine(encoding) { line ->
                 E entity = toEntity(line)
 
-                if (ObjectUtils.equals(id, entity.getId())) {
-                    if (entity.isLogicalDeleted()) { // 既に論理削除済みの場合
+                if (id == entity.id) {
+                    if (entity.logicalDeleted) { // 既に論理削除済みの場合
                         throw new EntityNotFoundException("id = ${id}のエンティティは既に論理削除されています。")
                     }
 
@@ -230,7 +218,7 @@ Repository<K, E> {
                 }
 
                 writeEntity(entity, writer)
-            })
+            }
 
             if (!deleted) {
                 // パラメーターで指定されたエンティティが存在しなかった場合
@@ -240,7 +228,7 @@ Repository<K, E> {
     }
 
     String fromEntity(E entity) {
-        return StringUtils.join(entity.toArray(), getSeparator())
+        entity.toArray().join(getSeparator())
     }
 
     E toEntity(String line) {
@@ -260,22 +248,22 @@ Repository<K, E> {
     }
 
     protected String[] parseLine(String line) {
-        StringTokenizer st = new StringTokenizer(line, getSeparator(), true)
-        List<String> result = new ArrayList<String>()
-        String prevToken = ''
+        def st = new StringTokenizer(line, getSeparator(), true)
+        def result = []
+        def prevToken = ''
         while (st.hasMoreTokens()) {
-            String token = st.nextToken()
+            def token = st.nextToken()
 
-            if (prevToken.equals(getSeparator()) && token.equals(getSeparator())) {
-                result.add(''); // 区切りが連続する場合は空文字をつめる。
+            if ((prevToken == getSeparator()) && token == getSeparator()) {
+                result << '' // 区切りが連続する場合は空文字をつめる。
             } else if (!getSeparator().equals(token)) {
-                result.add(token)
+                result << token
             }
 
             prevToken = token
         }
 
-        return result.toArray(new String[result.size()])
+        result
     }
 
     private void commit() {

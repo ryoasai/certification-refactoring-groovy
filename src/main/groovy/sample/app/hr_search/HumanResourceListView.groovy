@@ -50,9 +50,9 @@ class HumanResourceListView extends AbstractDispatcher implements View<List<Huma
     /**
      * 業種リスト
      */
-    private List<Occupation> occupationList
+    private def occupationList
 
-    private List<HumanResource> hrList
+    private def hrList
 
     /**
      * ページ番号
@@ -74,7 +74,7 @@ class HumanResourceListView extends AbstractDispatcher implements View<List<Huma
 
     @Override
     protected boolean isEndCommand(String inputCode) {
-        return 'E'.equals(inputCode)
+        'E'.equals(inputCode)
     }
 
     @Override
@@ -84,12 +84,12 @@ class HumanResourceListView extends AbstractDispatcher implements View<List<Huma
 
     @Override
     protected void runFunction(String inputCode) {
-        if ('P'.equals(inputCode)) {
+        if ('P' == inputCode) {
             // 前の10件
             if (page > 1) {
                 previous()
             }
-        } else if ('N'.equals(inputCode)) {
+        } else if ('N' == inputCode) {
             // 次の10件
             next()
         } else { // 人材ID入力
@@ -117,7 +117,7 @@ class HumanResourceListView extends AbstractDispatcher implements View<List<Huma
         console.acceptFromList(CODE_LIST, '')
     }
 
-    private void displayHRListOnPage() {
+    private def displayHRListOnPage() {
         while (true) { // 人材情報がヒットしなければ表示を繰り返す
             if (doDisplayHRListOnPage() > 0 || page == 1)
                 break; // 人材一覧が表示されたか1ページ目のときにループを抜ける
@@ -144,14 +144,14 @@ class HumanResourceListView extends AbstractDispatcher implements View<List<Huma
         }
 
         if (count == 0) {
-            console.display('人材情報はありません。\n')
+            console.display '人材情報はありません。'
         }
 
         count
     }
 
 
-    private void displayHumanResource(String inputCode) {
+    private def displayHumanResource(String inputCode) {
         try {
             HumanResource hr = hrRepository.findById(Long.parseLong(inputCode))
             hrView.display(hr)
@@ -178,20 +178,17 @@ class HumanResourceListView extends AbstractDispatcher implements View<List<Huma
      *            業種IDを表す文字列
      * @return 業種名
      */
-    String getOccupationName(long occupationId) {
-        for (Occupation occupation: occupationList) {
-            long id = occupation.getId()
-            if (id == occupationId) {
-                return occupation.getName()
-            }
+    private def getOccupationName(long occupationId) {
+        def found = occupationList.find {occupation ->
+            occupation.id == occupationId
         }
 
-        null
+        found?.name
     }
 
-    private List<Work> findWorkListByHRId(long hrId) {
+    private def findWorkListByHRId(long hrId) {
         Work workExample = new Work()
-        workExample.setHrId(hrId)
+        workExample.hrId = hrId
 
         workRespository.findByExample(workExample)
     }

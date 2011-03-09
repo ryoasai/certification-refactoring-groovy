@@ -31,7 +31,7 @@ class InputWorkFunction implements Function {
      * 稼働状況管理(追加)の実行
      */
     void run() {
-        Work work = inputData()
+        def work = inputData()
 
         doCreate(work)
     }
@@ -39,12 +39,12 @@ class InputWorkFunction implements Function {
     /**
      * 稼働状況の入力
      */
-    private Work inputData() {
-        Work work = new Work()
+    private def inputData() {
+        def work = new Work()
 
-        long hrId = console.acceptLong('人材IDを入力してください。', {input ->
+        long hrId = console.acceptLong('人材IDを入力してください。') {input ->
             hrRepository.findById(input) != null // 人材ID存在チェック
-        })
+        }
 
         work.hrId = hrId
         work.partnerId = console.acceptFromNameIdList(partnerRepository.findAll(), '取引先を選択してください。')
@@ -58,7 +58,7 @@ class InputWorkFunction implements Function {
     /**
      * 稼働状況のファイルへの登録
      */
-    private void doCreate(Work work) {
+    private def doCreate(Work work) {
         workRepository.create(work)
 
         console.display '登録されました。'

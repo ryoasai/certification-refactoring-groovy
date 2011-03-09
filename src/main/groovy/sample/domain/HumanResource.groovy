@@ -19,6 +19,7 @@ class HumanResource extends Party {
             schoolBackground: '最終学歴',
             requestedSalary: '希望単価']
 
+
     /** 誕生日   */
     String birthDay
 

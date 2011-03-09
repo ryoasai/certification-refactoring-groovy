@@ -45,9 +45,9 @@ class InputHRFunction implements Function {
             def message = "${value}を入力してください。"
 
             if (value == '性別') {
-                hr[key] = console.accept(message, {input ->
+                hr[key] = console.accept(message) {input ->
                     'M'.equals(input) || 'F'.equals(input)
-                })
+                }
 
             } else if (value == '業種') {
                 hr[key] = console.acceptFromIdList(occupationRespository.findAll(), message)
